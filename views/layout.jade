@@ -8,8 +8,6 @@ html
       a(href="/tytubka/",class="button") Home 
       a(href="/tytubka/list",class="button") Downloaded 
     div(class="inprogress")
-     if __downloading.length
-      span In progress:  
      each video in __downloading
       div(class="row")
        a(href="/tytubka/cancel/"+video.id, class="delete") X 
