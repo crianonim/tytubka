@@ -40,8 +40,7 @@ a {
   padding: 10px;
   border: #00B7FF 1px solid;
   background-color: #ccf1ff;
-  display: flex;
-  justify-content: center;
+  
 }
 .delete {
   color:red;
@@ -101,4 +100,5 @@ form div input {
 }
 .format-item a{
   display: block;
+  width:100%;
 }
