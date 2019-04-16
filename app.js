@@ -9,6 +9,7 @@ var indexRouter = require('./routes/index');
 var infoRouter = require('./routes/info');
 var downloadRouter = require('./routes/download');
 const listRouter = require('./routes/list');
+const sendFileRouter = require("./routes/sendfile")
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,6 +25,7 @@ app.use('/tytubka/', indexRouter);
 app.use('/tytubka/info',infoRouter);
 app.use('/tytubka/download',downloadRouter);
 app.use('/tytubka/list',listRouter)
+app.use('/tytubka/sendfile',sendFileRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
