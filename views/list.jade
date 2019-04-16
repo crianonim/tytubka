@@ -15,7 +15,7 @@ block content
             span by #{file.author.user} downloaded #{new Date(file.timestamp)}
             span size: #{file.size} extension: #{file.formatData.Extension}
             span length: #{file.length} resolution: #{file.formatData.Resolution} audio bitrate: #{file.formatData.AudioBitrate} kbps
-
+            a(href="/tytubka/delete/"+file.id,class="delete") DELETE
 
 //  h1= movieTitle
   

@@ -9,5 +9,6 @@ html
       span In progress:  
      each video in __downloading
       div
+       a(href="/tytubka/cancel/"+video.id, class="delete") CANCEL 
        span #{video.progressPercent||0} % #{video.title} 
     block content

@@ -24,7 +24,9 @@ router.get('/', async function(req, res, next) {
     }
     __downloading.push(metadata)
     let rs=ytdl(url,{format});
-    rs.pipe(fs.createWriteStream(__basedir+"/downloading/"+downloadingFileName))
+    let ws=rs.pipe(fs.createWriteStream(__basedir+"/downloading/"+downloadingFileName))
+    metadata.rs=rs;
+    metadata.ws=ws;
     rs.on("response",(r)=>{
       metadata.size=Number(r.headers['content-length'])
       // console.log("RS",r.headers['content-length']);
@@ -47,7 +49,12 @@ router.get('/', async function(req, res, next) {
       fs.writeFile(path.join(__basedir,'output',downloadingFileName+".json"),JSON.stringify(metadata,null," "),()=>{})
       __downloading=__downloading.filter(el=>el.id!=metadata.id);
     });    
-
+    ws.on("unpipe",()=>{
+      ws.end();
+      fs.unlink(path.join(__basedir,'downloading',downloadingFileName),(err)=>{
+        console.log("Couldn't delete file");
+      })
+    })
   res.render('index', { title: "TyTubka"});
 });
 

@@ -26,3 +26,6 @@ a {
   font-size: 1.4em;
   margin: 10px 0;
 }
+.delete {
+  color:red;
+}
