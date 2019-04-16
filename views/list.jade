@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  a(href="/tytubka/") Home
+  each file in fileList
+   li
+    a(href="/tutubka/sendfile/"+file.name) #{file.name} 
+    span #{file.size} #{file.mtime}
+//  h1= movieTitle
+  
+  
+// img(src="#{thumbnail}")
+//  each val in formats
+   li #{val[0]} 
+    a(href="/tytubka/download?url="+url+"&format="+val[0]+"&title="+movieTitle)= val[1]
+        
