@@ -1,4 +1,5 @@
 global.__basedir = __dirname;
+global.__downloading=[];
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -19,6 +20,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use((req,res,next)=>{
+  // console.log("PROGRESS",JSON.stringify(__downloading));
+  next();
+})
 app.use('/tytubka',express.static(path.join(__dirname, 'public')));
 
 app.use('/tytubka/', indexRouter);

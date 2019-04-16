@@ -22,6 +22,7 @@ router.get('/', async function(req, res, next) {
       formatData:formats[format],
       id:downloadingFileName,
     }
+    __downloading.push(metadata)
     let rs=ytdl(url,{format});
     rs.pipe(fs.createWriteStream(__basedir+"/downloading/"+downloadingFileName))
     rs.on("response",(r)=>{
@@ -32,15 +33,19 @@ router.get('/', async function(req, res, next) {
       metadata.thumbnail_url=info.thumbnail_url;
       metadata.length=info.length_seconds;
       metadata.author=info.author;
-      
-      // console.log("IN",JSON.stringify(r.thumbnail_url,null," "));
-
+    });
+    rs.on("progress",(chunkLength,downloaded,total)=>{
+      metadata.progressTotal=total;
+      metadata.progressDownloaded=downloaded;
+      metadata.progressChunkLength=chunkLength;
+      metadata.progressPercent=((downloaded/total)*100)>>0
     })
     rs.on("end",()=>{
       console.log("FINISHED downloading...");
       rename(path.join(__basedir,'downloading',downloadingFileName),path.join(__basedir,'output',downloadingFileName))
       metadata.timestamp=Date.now();
       fs.writeFile(path.join(__basedir,'output',downloadingFileName+".json"),JSON.stringify(metadata,null," "),()=>{})
+      __downloading=__downloading.filter(el=>el.id!=metadata.id);
     });    
 
   res.render('index', { title: "TyTubka"});
