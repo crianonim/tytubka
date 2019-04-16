@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  
+  h1= title
+  p Welcome to #{title}
+  a(href="/tytubka/output") Output folder
+  form(action="/tytubka/info")
+        label Enter youtube url (address)
+            input(name="url")
+        button Get
+        
