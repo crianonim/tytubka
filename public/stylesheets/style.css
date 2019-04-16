@@ -2,7 +2,27 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
+.row, .details,.file-list {
+  display: flex;
+  
+}
+.row {
+  margin: 5px 0;
+}
+.details,.file-list{
+  flex-direction: column;
+}
 a {
+  text-decoration: none;
   color: #00B7FF;
+}
+.details {
+  margin-left:5px;
+}
+.video-title {
+  font-size: 1.2em;
+}
+.format-item {
+  font-size: 1.4em;
+  margin: 10px 0;
 }

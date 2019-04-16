@@ -1,12 +1,11 @@
 extends layout
 
 block content
-  
+  a(href="/tytubka/") Home 
+  a(href="/tytubka/list") Downloaded 
   h1= title
-  p Welcome to #{title}
-  a(href="/tytubka/output") Output folder
   form(action="/tytubka/info")
-        label Enter youtube url (address)
+        label Enter youtube video url (address)
             input(name="url")
         button Get
         

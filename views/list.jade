@@ -1,11 +1,22 @@
 extends layout
 
 block content
-  a(href="/tytubka/") Home
-  each file in fileList
-   li
-    a(href="/tytubka/sendfile/"+file.name) #{file.name} 
-    span #{file.size} #{file.mtime}
+  a(href="/tytubka/") Home 
+  a(href="/tytubka/list") Downloaded 
+  div(class="file-list")
+   each file in fileList
+   
+     //- span=JSON.stringify(file)
+     div(class="row")
+        a(href="/tytubka/sendfile/"+file.id) 
+         img(src=file.thumbnail_url)
+        div(class="details")
+            a(href="/tytubka/sendfile/"+file.id, class="video-title") #{file.title}
+            span by #{file.author.user} downloaded #{new Date(file.timestamp)}
+            span size: #{file.size} extension: #{file.formatData.Extension}
+            span length: #{file.length} resolution: #{file.formatData.Resolution} audio bitrate: #{file.formatData.AudioBitrate} kbps
+
+
 //  h1= movieTitle
   
   
