@@ -1,0 +1,12 @@
+[Unit]
+Description=Tytubka node express service
+After=network.target
+
+[Service]
+User=criamon
+WorkingDirectory=/home/criamon/share/tytubka
+Restart=always
+ExecStart=/usr/bin/npm start 
+
+[Install]
+WantedBy=default.target
