@@ -4,11 +4,16 @@ html
     title= title
     link(rel='stylesheet', href='/tytubka/stylesheets/style.css')
   body
+    nav 
+      a(href="/tytubka/",class="button") Home 
+      a(href="/tytubka/list",class="button") Downloaded 
     div(class="inprogress")
      if __downloading.length
       span In progress:  
      each video in __downloading
-      div
-       a(href="/tytubka/cancel/"+video.id, class="delete") CANCEL 
-       span #{video.progressPercent||0} % #{video.title} 
+      div(class="row")
+       a(href="/tytubka/cancel/"+video.id, class="delete") X 
+       span(class="video-title") #{video.title} 
+       span(class="percent") #{video.progressPercent||0}&nbsp;% 
+   
     block content

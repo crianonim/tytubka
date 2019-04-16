@@ -1,6 +1,6 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 24px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 .row, .details,.file-list {
   display: flex;
@@ -16,16 +16,77 @@ a {
   text-decoration: none;
   color: #00B7FF;
 }
+.file-list .row {
+  margin: 30px 0;
+  /* height: 120px; */
+}
 .details {
-  margin-left:5px;
+  margin-left:10px;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.metadata-row{
+  display: flex;
+}
+.metadata-row span {
+  margin:0 10px;
 }
 .video-title {
   font-size: 1.2em;
 }
 .format-item {
   font-size: 1.4em;
-  margin: 10px 0;
+  margin: 25px 0;
+  padding: 10px;
+  border: #00B7FF 1px solid;
 }
 .delete {
   color:red;
+}
+nav {
+  margin: 10px;
+}
+nav a.button {
+  padding: 10px;
+  background-color: #00B7FF;
+  color:white;
+  font-size: 1.5em;
+  margin:20px 20px;
+  border-radius: 10px;
+}
+.video-length {
+  font-weight: bolder;
+}
+.delete {
+  padding: 10px;
+  background-color: red;
+  color:white;
+  display: flex;
+  align-items: center;
+}
+form div {
+  display: flex;
+}
+form div > *{
+  margin-right: 10px;
+  font-size: 2em;
+}
+form div input {
+  flex-grow: 1;
+}
+.expand{
+  display: block;
+  width: 100%;
+}
+.inprogress .video-title {
+  flex-grow: 1;
+}
+.inprogress .percent {
+  padding:5px;
+  display: flex;
+  align-items: center;
+  border: 1px solid gray;
+}
+.inprogress .row > *{
+  margin: 2px;
 }

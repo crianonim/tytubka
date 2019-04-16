@@ -1,14 +1,12 @@
 extends layout
 
 block content
-  a(href="/tytubka/") Home 
-  a(href="/tytubka/list") Downloaded 
+  
   h1= movieTitle
-  div(class="row")
-   img(src="#{thumbnail}")
+  img(class="expand",src="#{thumbnail}")
   //-  span by #{author.user}
   each format in formats
     div(class="format-item") 
      a(href="/tytubka/download?url="+url+"&format="+format.Itag+"&title="+movieTitle) 
-      span Get: Resolution: #{format.Resolution} File: #{format.Extension} Audio: #{format.AudioBitrate} kbs
+      span #{format.Resolution} #{format.Extension} #{format.AudioBitrate} kbs
         
