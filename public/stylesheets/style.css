@@ -78,11 +78,17 @@ form div input {
   display: block;
   width: 100%;
 }
+.inprogress {
+  margin-top: 20px;
+}
+.inprogress .row {
+  align-items: center;
+}
 .inprogress .video-title {
   flex-grow: 1;
 }
 .inprogress .percent {
-  padding:5px;
+  padding:5px 8px;
   display: flex;
   align-items: center;
   border: 1px solid gray;
