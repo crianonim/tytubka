@@ -39,6 +39,9 @@ a {
   margin: 25px 0;
   padding: 10px;
   border: #00B7FF 1px solid;
+  background-color: #ccf1ff;
+  display: flex;
+  justify-content: center;
 }
 .delete {
   color:red;
@@ -95,4 +98,7 @@ form div input {
 }
 .inprogress .row > *{
   margin: 2px;
+}
+.format-item a{
+  display: block;
 }
