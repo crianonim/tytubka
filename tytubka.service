@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 User=criamon
+Environment=MOUNT_PATH=tytubka
 WorkingDirectory=/home/criamon/share/tytubka
 Restart=always
 ExecStart=/usr/bin/npm start 

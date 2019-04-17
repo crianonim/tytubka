@@ -9,7 +9,7 @@ router.get('/:fileName', async function (req, res, next) {
     let fileName=req.params.fileName;
     await unlink(path.join(__basedir,"output",fileName)).catch((e)=>{console.error(e)});
     await unlink(path.join(__basedir,"output",fileName+".json")).catch((e)=>{console.error(e)});
-    res.redirect('/tytubka/list')
+    res.redirect(res.locals.MOUNT_PATH+'/list')
 });
 
 module.exports = router;

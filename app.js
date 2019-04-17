@@ -22,19 +22,27 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use((req,res,next)=>{
-  // console.log("PROGRESS",JSON.stringify(__downloading));
+
+
+var mountedRouter=express.Router();
+app.use("/"+(process.env.MOUNT_PATH||""),mountedRouter)
+// make MOUNT_PATH know to the whole response (views, etc.)
+mountedRouter.use((req,res,next)=>{
+  res.locals.MOUNT_PATH=req.baseUrl;
   next();
 })
-app.use('/tytubka',express.static(path.join(__dirname, 'public')));
-
-app.use('/tytubka/', indexRouter);
-app.use('/tytubka/info',infoRouter);
-app.use('/tytubka/download',downloadRouter);
-app.use('/tytubka/list',listRouter)
-app.use('/tytubka/sendfile',sendFileRouter);
-app.use('/tytubka/delete',deleteRouter);
-app.use('/tytubka/cancel',cancelRouter)
+const apiRouter=express.Router();
+mountedRouter.use('/api',apiRouter);
+apiRouter.use('/',require('./routes/api/root'));
+// mount the whole router on MOUNT_PATH || "/" 
+mountedRouter.use(express.static(path.join(__dirname, 'public')));
+mountedRouter.use('/', require('./routes/index'));
+mountedRouter.use('/info',infoRouter);
+mountedRouter.use('/download',downloadRouter);
+mountedRouter.use('/list',listRouter)
+mountedRouter.use('/sendfile',sendFileRouter);
+mountedRouter.use('/delete',deleteRouter);
+mountedRouter.use('/cancel',cancelRouter)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

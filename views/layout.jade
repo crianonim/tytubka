@@ -2,15 +2,15 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/tytubka/stylesheets/style.css')
+    link(rel='stylesheet', href=MOUNT_PATH+"/stylesheets/style.css")
   body
     nav 
-      a(href="/tytubka/",class="button") Home 
-      a(href="/tytubka/list",class="button") Downloaded 
+      a(href=MOUNT_PATH+"/",class="button") Home 
+      a(href=MOUNT_PATH+"/list",class="button") Downloaded 
     div(class="inprogress")
      each video in __downloading
       div(class="row")
-       a(href="/tytubka/cancel/"+video.id, class="delete") X 
+       a(href=MOUNT_PATH+"/cancel/"+video.id, class="delete") X 
        span(class="video-title") #{video.title} 
        span(class="percent") #{video.progressPercent||0}&nbsp;% 
    

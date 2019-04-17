@@ -13,7 +13,7 @@ router.get('/:fileName', async function (req, res, next) {
         meta.rs.unpipe();
         meta.rs.destroy();
     }
-    res.redirect('/tytubka/list')
+    res.redirect(res.locals.MOUNT_PATH+'/list')
 });
 
 module.exports = router;

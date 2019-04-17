@@ -3,7 +3,7 @@ extends layout
 block content
   
   h1= title
-  form(action="/tytubka/info")
+  form(action=MOUNT_PATH+"/info")
         span Enter Youtube video address 
         div
           input(name="url")

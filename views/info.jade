@@ -7,6 +7,6 @@ block content
   //-  span by #{author.user}
   each format in formats
     div(class="format-item") 
-     a(href="/tytubka/download?url="+url+"&format="+format.Itag+"&title="+movieTitle) 
+     a(href=MOUNT_PATH+"/download?url="+url+"&format="+format.Itag+"&title="+movieTitle) 
       span #{format.Resolution} #{format.Extension} #{format.AudioBitrate} kbs
         
