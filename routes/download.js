@@ -34,6 +34,7 @@ router.get('/', async function(req, res, next) {
     rs.on("info",(info)=>{
       metadata.thumbnail_url=info.thumbnail_url;
       metadata.length=info.length_seconds;
+      metadata.title=info.title;
       metadata.author=info.author;
     });
     rs.on("progress",(chunkLength,downloaded,total)=>{

@@ -4,10 +4,12 @@ After=network.target
 
 [Service]
 User=criamon
-Environment=MOUNT_PATH=tytubka
+Environment=MOUNT_PATH=tytubka PORT=3000
 WorkingDirectory=/home/criamon/share/tytubka
 Restart=always
+RestartSec=10
 ExecStart=/usr/bin/npm start 
-
+StandardOutput=syslog
+StandardError=syslog
 [Install]
 WantedBy=default.target

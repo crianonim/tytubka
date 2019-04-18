@@ -7,7 +7,7 @@ const formats = require("../../formats");
 const prettyMs= require('pretty-ms');
 /* GET home page. */
 router.get('/:url', async function (req, res, next) {
-  let url = req.params.url;
+  let url = 'https://youtube.com/watch?'+req.params.url;
     console.log("URL",url)
     let info = await ytdl.getBasicInfo(url).catch(e=>{
       res.json([])

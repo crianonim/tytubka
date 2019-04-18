@@ -39,7 +39,7 @@ router.get('/:id', async function (req, res, next) {
 });
 router.post('/:videoId/:itag', async function(req, res, next) {
     
-    let url=req.params.videoId;
+    let url='https://youtube.com/watch?'+req.params.videoId;
     let format=req.params.itag;
     let downloadingFileName=""+Date.now();
    console.log("")
@@ -61,6 +61,7 @@ router.post('/:videoId/:itag', async function(req, res, next) {
     })
     rs.on("info",(info)=>{
       metadata.title=info.title;
+      console.log(info.title)
       metadata.thumbnail_url=info.thumbnail_url;
       metadata.length=info.length_seconds;
       metadata.author=info.author;
