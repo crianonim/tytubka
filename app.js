@@ -6,6 +6,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const config=require('./tytubka.config');
 var indexRouter = require('./routes/index');
 var infoRouter = require('./routes/info');
 var downloadRouter = require('./routes/download');
@@ -22,10 +23,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(require('cors')())
 
 var mountedRouter=express.Router();
-app.use("/"+(process.env.MOUNT_PATH||""),mountedRouter)
+app.use("/"+(config.mountpath||process.env.MOUNT_PATH||""),mountedRouter)
 // make MOUNT_PATH know to the whole response (views, etc.)
 mountedRouter.use((req,res,next)=>{
   res.locals.MOUNT_PATH=req.baseUrl;
@@ -36,7 +37,7 @@ mountedRouter.use('/api',apiRouter);
 apiRouter.use('/',require('./routes/api/root'));
 apiRouter.use('/info',require('./routes/api/info'));
 // mount the whole router on MOUNT_PATH || "/" 
-mountedRouter.use(express.static(path.join(__dirname, 'public')));
+mountedRouter.use(express.static(path.join(__dirname, 'client','dist')));
 mountedRouter.use('/', require('./routes/index'));
 mountedRouter.use('/info',infoRouter);
 mountedRouter.use('/download',downloadRouter);
