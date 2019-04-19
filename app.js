@@ -34,8 +34,8 @@ mountedRouter.use((req,res,next)=>{
 })
 const apiRouter=express.Router();
 mountedRouter.use('/api',apiRouter);
-apiRouter.use('/',require('./routes/api/root'));
-apiRouter.use('/info',require('./routes/api/info'));
+apiRouter.use('/',require('./routes/api'));
+// apiRouter.use('/info',require('./routes/api/info'));
 // mount the whole router on MOUNT_PATH || "/" 
 mountedRouter.use(express.static(path.join(__dirname, 'client','dist')));
 mountedRouter.use('/', require('./routes/index'));

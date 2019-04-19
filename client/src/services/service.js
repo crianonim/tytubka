@@ -11,5 +11,11 @@ export default {
   },
   getStatus(){
       return axios.get(url+"/status")
+  },
+  getInfo(askedUrl){
+    return axios.get(url+'/info/'+askedUrl.replace(/^.*watch[?]v=(.*)$/,'$1'));
+  },
+  getHeadersStatus(askedUrl){
+      return axios.get(url+"/headersStatus?url="+encodeURI(askedUrl));
   }
 }

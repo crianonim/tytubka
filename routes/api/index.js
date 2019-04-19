@@ -10,6 +10,7 @@ const formats = require("../../formats");
 const filesize = require('filesize');
 const prettyms = require('pretty-ms');
 const ytdl=require('ytdl-core');
+const axios=require('axios');
 
 let downloading=[];
 let waiting={};
@@ -42,6 +43,44 @@ router.get("/notify/:id",(req,res,next)=>{
     res.sendStatus(404);
   }
 })
+router.get('/info/:url', async function (req, res, next) {
+  let url = 'https://youtube.com/watch?v='+req.params.url;
+    console.log("URL",url)
+    let info = await ytdl.getBasicInfo(url).catch(e=>{
+      res.json([])
+      //  next(createError(404));
+
+    });
+    let {title,thumbnail_url,fmt_list,length_seconds,author}=info;
+    let format=fmt_list.map(el=>formats[el[0]])
+    let length=prettyms(length_seconds*1000);
+    res.json({title,thumbnail_url,format,url,length,author})
+    
+    // res.render('info', {
+    //   title: "TyTubka",
+    //   movieTitle: info.title,
+    //   thumbnail: info.thumbnail_url,
+    //   formats: info.fmt_list.map(el=>formats[el[0]]),
+    //   url: url,
+    //   length: prettyms(info.length_seconds*1000),
+    //   author: info.author,
+    // });
+
+});
+router.get('/headersStatus',async (req,res,next)=>{
+  let url=req.query.url;
+  console.log("Got request for ",url);
+  try {
+    let answer=await axios.head(url);
+    console.log("AXIOS",answer.status)
+    res.send(answer.status);
+  }
+  catch(e) {
+    res.sendStatus(400);
+  }
+
+})
+
 router.get('/:id', async function (req, res, next) {
     let id=req.params.id;
     // console.log(req.params.fileName)
