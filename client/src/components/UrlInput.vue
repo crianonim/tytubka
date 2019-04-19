@@ -5,7 +5,9 @@
       <span class="btn rubbish" @click="rubbish">&#x2716;</span>
     </div>
       <span id="get-button" class="btn" @click="sendUrl"> Get </span>
-   
+  <div>
+    {{debug}}
+  </div>
   </div>
 </template>
 
@@ -16,11 +18,12 @@ export default {
   data() {
     return {
       url: "",
-    
+      // debug:"DEB",
     };
   },
   methods:{
       sendUrl(){
+        this.debug="URL:"+this.url;
           console.log("UrlInput send-url",this.url)
           this.$emit('send-url',this.url)
       },

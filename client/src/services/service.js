@@ -10,18 +10,18 @@ export default {
     
   },
   getStatus(){
-      return axios.get(url+"/status")
+      return axios.get(config.baseUrl+"/status")
   },
   storeVideo(askedUrl,itag){
-    return axios.post(url+"/",{url:askedUrl,itag});
+    return axios.post(config.baseUrl+"/",{url:askedUrl,itag});
   },
   notify(id){
-    return axios.get(url+"/notify/"+id);
+    return axios.get(config.baseUrl+"/notify/"+id);
   },
   getInfo(askedUrl){
-    return axios.get(url+'/info/'+askedUrl.replace(/^.*\/(watch\?v=)?/,'') );
+    return axios.get(config.baseUrl+'/info/'+askedUrl.replace(/^.*\/(watch\?v=)?/,'') );
   },
   getHeadersStatus(askedUrl){
-      return axios.get(url+"/headersStatus?url="+encodeURI(askedUrl));
+      return axios.get(config.baseUrl+"/headersStatus?url="+encodeURI(askedUrl));
   }
 }

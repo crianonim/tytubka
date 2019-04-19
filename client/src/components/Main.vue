@@ -30,13 +30,22 @@ export default {
   methods:{
       async receiveUrl(url){
           console.log("Received",url)
+          // this.messages.unshift("RECEIVED url"+url);
           if (url==""){
             this.info=null;
             return;
           }
-          let result=await Service.getInfo(url);
+          try {
+            let result=await Service.getInfo(url);
+          // this.messages.unshift("DATA"+result.data);
           console.log(result);
           this.info=result.data;
+
+          }
+          catch (e){
+            this.messages.unshift(JSON.stringify(e));
+            
+          }
       },
       async storeFormat(itag){
           this.messages.unshift("Store format "+itag+" of "+this.info.title);
