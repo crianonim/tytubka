@@ -12,6 +12,12 @@ export default {
   getStatus(){
       return axios.get(url+"/status")
   },
+  storeVideo(askedUrl,itag){
+    return axios.post(url+"/",{url:askedUrl,itag});
+  },
+  notify(id){
+    return axios.get(url+"/notify/"+id);
+  },
   getInfo(askedUrl){
     return axios.get(url+'/info/'+askedUrl.replace(/^.*watch[?]v=(.*)$/,'$1'));
   },
