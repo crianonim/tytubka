@@ -19,7 +19,7 @@ export default {
     return axios.get(url+"/notify/"+id);
   },
   getInfo(askedUrl){
-    return axios.get(url+'/info/'+askedUrl.replace(/^.*watch[?]v=(.*)$/,'$1'));
+    return axios.get(url+'/info/'+askedUrl.replace(/^.*\/(watch\?v=)?/,'') );
   },
   getHeadersStatus(askedUrl){
       return axios.get(url+"/headersStatus?url="+encodeURI(askedUrl));

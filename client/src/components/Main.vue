@@ -23,27 +23,31 @@ export default {
   data () {
     return {
         info:null,
-        messages:["Wiadomość <a href=''>aaa</a>"],
+        messages:[],
         messagesMaxCount:3,
     }
   },
   methods:{
       async receiveUrl(url){
-          console.log("REceived",url)
-          let result=await Service.getInfo(url.replace(/^.*watch?v=(.*)$/,'$1'));
+          console.log("Received",url)
+          if (url==""){
+            this.info=null;
+            return;
+          }
+          let result=await Service.getInfo(url);
           console.log(result);
           this.info=result.data;
       },
       async storeFormat(itag){
           this.messages.unshift("Store format "+itag+" of "+this.info.title);
-          console.log("storeFormat",itag,this.info.url);
+          // console.log("storeFormat",itag,this.info.url);
           if (this.messages.length>this.messagesMaxCount) this.messages.pop();
           // poproś o downaloadowanie
           let response=await Service.storeVideo(this.info.url,itag);
-          console.log("SERvis zwrócił id",response);
-              //notify
+          let id=response.data.metadata.id
+          console.log("Will store ad id:",id);
           try{
-              await Service.notify(response.data.metadata.id);
+              await Service.notify(id);
               this.messages.unshift("Stored "+this.info.title+" ");
           }
           catch (e){
@@ -61,18 +65,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
+
+
 </style>

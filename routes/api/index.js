@@ -81,9 +81,11 @@ router.get('/headersStatus',async (req,res,next)=>{
 
 })
 router.get('/direct',(req,res,next)=>{
-  let {url,itag}=req.query;
-  console.log('DIRECT',itag,url);
-  res.writeHead(200,{"Content-Disposition": "attachment;filename=file.mp4"})
+  let {url,itag,title,extension}=req.query;
+  console.log('DIRECT',itag,url,"filename:"+title+"."+extension);
+  res.writeHead(200,{
+    "Content-Type": "application/octet-stream",
+    "Content-Disposition": "attachment;filename="+title.replace(/[^A-z0-9 ]/g,'')+"."+extension})
   ytdl(url,{format:itag}).pipe(res);
 })
 router.get('/:id', async function (req, res, next) {

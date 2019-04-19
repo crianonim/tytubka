@@ -1,41 +1,32 @@
 <template>
   <div class="url-input">
     <div class="url-input-line">
-      <input @input="urlChanged" v-model="url">
-      <button @click="sendUrl" :disabled="disabled">Get</button>
+      <input v-model="url">
+      <span class="btn rubbish" @click="rubbish">&#x2716;</span>
     </div>
-    <div class="message">
-        {{message}}    
-    </div>
+      <span id="get-button" class="btn" @click="sendUrl"> Get </span>
+   
   </div>
 </template>
 
 <script>
-import Service from '@/services/service'
+
 export default {
   name: "url-input",
   data() {
     return {
       url: "",
-      message:"ZObaczny",
-      disabled:true
+    
     };
   },
   methods:{
-      async urlChanged(e){
-        this.message=this.url;
-        try {
-            this.message=(await Service.getHeadersStatus(this.url)).data;     
-            this.disabled=false;    
-        } 
-        catch (err){
-            this.message=err.message;
-            this.disabled=true;
-        }
-      },
       sendUrl(){
-          console.log("Will send",this.url)
+          console.log("UrlInput send-url",this.url)
           this.$emit('send-url',this.url)
+      },
+      rubbish(){
+        this.url="";
+        this.sendUrl();
       }
   },
 };
@@ -47,6 +38,14 @@ export default {
   width: 100%;
   display: flex;
 }
+.url-input {
+  display: flex;
+  flex-direction: column;
+}
+.url-input > * {
+  margin-top:5px;
+}
+
 .url-input-line input {
   flex-grow: 1;
 }
@@ -64,5 +63,13 @@ li {
 }
 a {
   color: #42b983;
+}
+.rubbish{
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+#get-button {
+  padding: 10px;
 }
 </style>
