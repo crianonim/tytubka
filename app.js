@@ -7,7 +7,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 const config=require('./tytubka.config');
-var indexRouter = require('./routes/index');
+// var indexRouter = require('./routes/index');
 var infoRouter = require('./routes/info');
 var downloadRouter = require('./routes/download');
 const listRouter = require('./routes/list');
@@ -18,10 +18,10 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(require('body-parser').json())
 app.use(cookieParser());
 app.use(require('cors')())
 

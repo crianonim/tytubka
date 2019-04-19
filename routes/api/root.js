@@ -10,6 +10,9 @@ const formats = require("../../formats");
 const filesize = require('filesize');
 const prettyms = require('pretty-ms');
 const ytdl=require('ytdl-core');
+
+let downloading=[];
+let waiting={};
 router.get('/', async function (req, res, next) {
     let fileNames = await util.promisify(fs.readdir)(path.join(__basedir, "output"))
     fileNames = fileNames.filter(name => name.endsWith(".json"))
@@ -29,6 +32,16 @@ router.get('/', async function (req, res, next) {
         })
    res.json(files)
 });
+router.get("/notify/:id",(req,res,next)=>{
+  console.log("NOTIFY")
+  let id=req.params.id;
+  if (downloading.find(el=>el.id==id)){
+    console.log("FOund")
+    waiting[req.params.id]=res;
+  } else {
+    res.sendStatus(404);
+  }
+})
 router.get('/:id', async function (req, res, next) {
     let id=req.params.id;
     // console.log(req.params.fileName)
@@ -37,31 +50,35 @@ router.get('/:id', async function (req, res, next) {
     // console.log(metadata);
     res.download(path.join(__basedir,"output",id),destinationFileName)
 });
-router.post('/:videoId/:itag', async function(req, res, next) {
-    
-    let url='https://youtube.com/watch?'+req.params.videoId;
-    let format=req.params.itag;
-    let downloadingFileName=""+Date.now();
-   console.log("")
+router.post('/', async function(req, res, next) {
+  console.log(req.body);  
+  let {url,format}=req.body;
+  
+    let id=""+Date.now();
+
+   console.log(`GOT POST WITH url ${url} and format ${format}`);
+  //  res.sendStatus(200);
+  //  return 
     let metadata={
       url,
       format,
       formatData:formats[format],
-      id:downloadingFileName,
+      id,
     }
-    __downloading.push(metadata)
+    downloading.push(metadata)
     let rs=ytdl(url,{format});
-    let ws=rs.pipe(fs.createWriteStream(__basedir+"/downloading/"+downloadingFileName))
+    let ws=rs.pipe(fs.createWriteStream(__basedir+"/downloading/"+id))
     metadata.rs=rs;
     metadata.ws=ws;
     console.log("Downloading");
     rs.on("response",(r)=>{
+      console.log("response")
         metadata.size=Number(r.headers['content-length'])
-        res.send({size:metadata.size});
+        res.send({metadata});
     })
     rs.on("info",(info)=>{
       metadata.title=info.title;
-      console.log(info.title)
+      console.log("info",info.title)
       metadata.thumbnail_url=info.thumbnail_url;
       metadata.length=info.length_seconds;
       metadata.author=info.author;
@@ -74,17 +91,20 @@ router.post('/:videoId/:itag', async function(req, res, next) {
     })
     rs.on("end",()=>{
       console.log("FINISHED downloading...");
-      rename(path.join(__basedir,'downloading',downloadingFileName),path.join(__basedir,'output',downloadingFileName))
+      rename(path.join(__basedir,'downloading',id),path.join(__basedir,'output',id))
       metadata.timestamp=Date.now();
       delete metadata.rs;
       delete metadata.ws;
-      fs.writeFile(path.join(__basedir,'output',downloadingFileName+".json"),JSON.stringify(metadata,null," "),()=>{})
-      __downloading=__downloading.filter(el=>el.id!=metadata.id);
+      fs.writeFile(path.join(__basedir,'output',id+".json"),JSON.stringify(metadata,null," "),()=>{})
+      downloading=downloading.filter(el=>el.id!=metadata.id);
+      if (waiting[id]){
+        waiting[id].send("File "+metadata.title+" downloaded");
+      }
     });    
     ws.on("unpipe",()=>{
         console.log("Unpipe event")
       ws.end();
-      fs.unlink(path.join(__basedir,'downloading',downloadingFileName),(err)=>{
+      fs.unlink(path.join(__basedir,'downloading',id),(err)=>{
         console.log("Couldn't delete file");
       })
     })
@@ -98,4 +118,6 @@ router.delete('/:fileName', async function (req, res, next) {
     await unlink(path.join(__basedir,"output",fileName+".json")).catch((e)=>{console.error(e)});
     res.sendStatus(200);
 });
+
+
 module.exports = router;
