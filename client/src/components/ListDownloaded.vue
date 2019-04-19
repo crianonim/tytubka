@@ -1,6 +1,7 @@
 <template>
   <div @click="getDownloaded" class="list">
     To jest lista
+    {{status}}
     <ul>
       <li v-for="(row,ind) in list" :key="ind">{{row.title}}</li>
     </ul>
@@ -16,6 +17,7 @@ export default {
     return {
       msg: "Welcome to Your List",
       list: this.getDownloaded(),
+      status: this.getStatus(),
     };
   },
   methods: {
@@ -23,6 +25,12 @@ export default {
       Service.getDownloaded().then(response => {
         this.list = response.data;
       });
+    },
+    getStatus(){
+        Service.getStatus().then(response=>{
+            this.status=response.data;
+            this.getStatus();
+        })
     }
   }
 };

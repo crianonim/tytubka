@@ -8,5 +8,8 @@ export default {
       console.log(url)
      return axios.get(url)
     
+  },
+  getStatus(){
+      return axios.get(url+"/status")
   }
 }
