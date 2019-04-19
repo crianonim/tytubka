@@ -6,7 +6,7 @@
     </div>
       <span id="get-button" class="btn" @click="sendUrl"> Get </span>
   <div>
-    {{debug}}
+    <!-- {{debug}} -->
   </div>
   </div>
 </template>
