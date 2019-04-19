@@ -80,7 +80,12 @@ router.get('/headersStatus',async (req,res,next)=>{
   }
 
 })
-
+router.get('/direct',(req,res,next)=>{
+  let {url,itag}=req.query;
+  console.log('DIRECT',itag,url);
+  res.writeHead(200,{"Content-Disposition": "attachment;filename=file.mp4"})
+  ytdl(url,{format:itag}).pipe(res);
+})
 router.get('/:id', async function (req, res, next) {
     let id=req.params.id;
     // console.log(req.params.fileName)
@@ -89,6 +94,7 @@ router.get('/:id', async function (req, res, next) {
     // console.log(metadata);
     res.download(path.join(__basedir,"output",id),destinationFileName)
 });
+
 router.post('/', async function(req, res, next) {
   console.log(req.body);  
   let {url,format}=req.body;
