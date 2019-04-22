@@ -11,9 +11,97 @@ const filesize = require('filesize');
 const prettyms = require('pretty-ms');
 const ytdl = require('ytdl-core');
 const axios = require('axios');
-
+// const mock = require('./mockDownload');
 let downloading = [];
 let waiting = {};
+
+router.get('/store', async function (req, res, next) {
+  console.log(req.query);
+  let { url, itag } = req.query;
+  let format=itag;
+  let id = "" + Date.now();
+
+  console.log(`GOT /store WITH url ${url} and format ${format}`);
+  let metadata = {
+    url,
+    format,
+    formatData: formats[format],
+    id,
+  }
+  downloading.push(metadata)
+  let rs = ytdl(url, { format });
+  let ws = rs.pipe(fs.createWriteStream(__basedir + "/downloading/" + id))
+  
+  metadata.rs = rs;
+  metadata.ws = ws;
+
+  console.log("Downloading");
+  rs.on("response", (r) => {
+    // console.log("response")
+    metadata.size = Number(r.headers['content-length'])
+    res.send({ metadata });
+    let time = Date.now();
+   
+  })
+  rs.on("info", (info) => {
+    metadata.title = info.title;
+    // console.log("info", info.title)
+    metadata.thumbnail_url = info.thumbnail_url;
+    metadata.length = info.length_seconds;
+    metadata.author = info.author;
+  
+  });
+  rs.on("progress", (chunkLength, downloaded, total) => {
+    metadata.progressTotal = total;
+    metadata.progressDownloaded = downloaded;
+    metadata.progressChunkLength = chunkLength;
+    metadata.progressPercent = ((downloaded / total) * 100) >> 0;
+   
+  })
+  rs.on("end", () => {
+    console.log("FINISHED downloading...");
+    rename(path.join(__basedir, 'downloading', id), path.join(__basedir, 'output', id))
+    metadata.timestamp = Date.now();
+    delete metadata.rs;
+    delete metadata.ws;
+    fs.writeFile(path.join(__basedir, 'output', id + ".json"), JSON.stringify(metadata, null, " "), () => { })
+    downloading = downloading.filter(el => el.id != metadata.id);
+    if (waiting[id]) {
+      waiting[id].send("File " + metadata.title + " downloaded");
+    }
+    let time = Date.now();
+    // let mockObj = JSON.stringify({
+    //   event: 'END',
+    //   time,
+    //   offset: time - mockStart,
+
+    // }, null, 1)
+    // // console.log(mockObj);
+    // mock.write(mockObj);
+  });
+  ws.on("unpipe", () => {
+    console.log("Unpipe event")
+    ws.end();
+    fs.unlink(path.join(__basedir, 'downloading', id), (err) => {
+      console.log("Couldn't delete file");
+    })
+  })
+});
+
+router.get('/cancel/:id', async function (req, res, next) {
+    let id=req.params.id;
+    let meta=__downloading.find(el=>el.id==id);
+    if (meta){
+        __downloading=__downloading.filter(el=>el.id!=id);
+        meta.rs.unpipe();
+        meta.rs.destroy();
+        res.sendStatus(200);
+    }
+    else {
+      res.sendStatus(404);
+    }
+    
+});
 router.get('/', async function (req, res, next) {
   let fileNames = await util.promisify(fs.readdir)(path.join(__basedir, "output"))
   fileNames = fileNames.filter(name => name.endsWith(".json"))
@@ -43,6 +131,37 @@ router.get("/notify/:id", (req, res, next) => {
     res.sendStatus(404);
   }
 })
+router.get('/test', async (req, res, next) => {
+  console.log("TEST")
+  let { url, itag, title, extension } = req.query;
+  let yrs = ytdl(url, { format: itag });
+  let out = fs.createWriteStream('emitter.json');
+  out.write('[\n');
+  let emit = yrs.emit;
+  let start = Date.now();
+
+  yrs.emit = (name, ...rest) => {
+    console.log(name);
+    let offset = Date.now() - start;
+    let obj = { time: offset, name, params: rest.length }
+    obj.paramsTypes = rest.map(x => Object.prototype.toString.call(x))
+    obj.registeredListenersCount = yrs.listenerCount(name);
+    switch (name) {
+      case 'info':
+      case 'progress': obj = { ...obj, ...rest }; break;
+      case 'data': obj.dataSize = rest[0].length; break;
+      case 'response': obj.headers = rest[0].headers; break;
+    }
+    out.write(JSON.stringify(obj, null, 1) + ",\n")
+    emit.call(yrs, name, ...rest)
+  }
+  yrs.pipe(res);
+  // out.write('\n]\n');
+  console.log("EVENT NAMES:", yrs.eventNames());
+
+})
+
+
 router.get('/info/:url', async function (req, res, next) {
   let url = 'https://youtube.com/watch?v=' + req.params.url;
   console.log("URL", url)
@@ -83,7 +202,9 @@ router.get('/headersStatus', async (req, res, next) => {
 router.get('/direct', (req, res, next) => {
   let { url, itag, title, extension } = req.query;
   console.log('DIRECT', itag, url, "filename:" + title + "." + extension);
-  let yrs = ytdl(url, { format: itag });
+  // let yrs = ytdl(url, { format: itag });
+  let yrs = ytdl(url, { filter: "audioonly" });
+ 
   yrs.on("response", (response) => {
     res.writeHead(200, {
       "Content-Type": response.headers["content-type"],
@@ -92,9 +213,8 @@ router.get('/direct', (req, res, next) => {
     })
     yrs.pipe(res);
   })
-
-
 })
+
 router.get('/:id', async function (req, res, next) {
   let id = req.params.id;
   // console.log(req.params.fileName)

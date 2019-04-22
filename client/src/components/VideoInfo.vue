@@ -1,5 +1,6 @@
 <template>
   <div class="video-info">
+    <!-- <textarea v-model="jsonified"></textarea> -->
     <h3>
       <a :href="info.url">{{info.title}}</a>
     </h3>
@@ -18,16 +19,15 @@
       <a
         class="btn"
         :href=" 'api/direct/?itag='+format.Itag+'&extension='+format.Extension+'&url='+info.url+'&title='+encodeURI(info.title)"
-      >
+      >Download</a>
         <div class="format-details">
           {{format.Extension}}
           {{format.Resolution}}
           {{format.AudioBitrate}} kbs
         </div>
-      </a>
-      <!-- <span class="btn" @click="storeFormat">Store</span> -->
+       
+      <span class="btn" :data-itag="format.Itag" @click="storeFormat">Store</span>
     </div>
-    <!-- {{info}} -->
   </div>
 </template>
 
@@ -37,7 +37,8 @@ export default {
   data() {
     return {
       url: "",
-      disabled: true
+      disabled: true,
+      // jsonified:JSON.stringify(this.info)
     };
   },
   props: ["info"],
@@ -65,13 +66,19 @@ export default {
 }
 
 
-.format a {
+.format {
   box-sizing: border-box;
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
   padding: 10px;
   margin:2px 0;
 }
-
+.format-details {
+  flex-grow:1;
+}
+.format .btn {
+  padding: 10px;
+}
 
 </style>

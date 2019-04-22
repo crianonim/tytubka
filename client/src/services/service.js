@@ -13,7 +13,8 @@ export default {
       return axios.get(config.baseUrl+"/status")
   },
   storeVideo(askedUrl,itag){
-    return axios.post(config.baseUrl+"/",{url:askedUrl,itag});
+    return axios.get(config.baseUrl+"/store?itag="+itag+"&url="+askedUrl)
+    //return axios.post(config.baseUrl+"/",{url:askedUrl,itag});
   },
   notify(id){
     return axios.get(config.baseUrl+"/notify/"+id);

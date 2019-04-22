@@ -1,9 +1,22 @@
 <template>
   <div @click="getDownloaded" class="list">
-    To jest lista
-    {{status}}
+    <!-- {{status}} -->
     <ul>
-      <li v-for="(row,ind) in list" :key="ind">{{row.title}}</li>
+      <li v-for="(row,ind) in list" :key="ind">
+        {{JSON.stringify(row)}}
+        <div class="video-item">
+          <img :src="row.thumbnail_url">
+          <div class="video-details">
+            <span class="title">{{row.title}}</span>
+            <span class="length">{{row.length}}</span>
+            <div class="file-details">
+              <span>{{row.size}}</span>
+              <span>{{row.formatData.Extension}}  </span>
+              </div>
+
+          </div>
+        </div>
+      </li>
     </ul>
   </div>
 </template>
@@ -16,8 +29,8 @@ export default {
   data() {
     return {
       msg: "Welcome to Your List",
-      list: this.getDownloaded(),
-      status: this.getStatus(),
+      list: this.getDownloaded()
+      // status: this.getStatus(),
     };
   },
   methods: {
@@ -26,11 +39,11 @@ export default {
         this.list = response.data;
       });
     },
-    getStatus(){
-        Service.getStatus().then(response=>{
-            this.status=response.data;
-            this.getStatus();
-        })
+    getStatus() {
+      Service.getStatus().then(response => {
+        this.status = response.data;
+        this.getStatus();
+      });
     }
   }
 };
@@ -38,6 +51,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.video-item {
+  display: flex;
+}
+.video-details {
+  display: flex;
+  flex-direction: column;
+}
 h1,
 h2 {
   font-weight: normal;

@@ -1,7 +1,8 @@
 <template>
   <div class="url-input">
     <div class="url-input-line">
-      <input v-model="url">
+      
+      <input id="url" v-model="url">
       <span class="btn rubbish" @click="rubbish">&#x2716;</span>
     </div>
       <span id="get-button" class="btn" @click="sendUrl"> Get </span>
@@ -30,7 +31,8 @@ export default {
       rubbish(){
         this.url="";
         this.sendUrl();
-      }
+      },
+     
   },
 };
 </script>
