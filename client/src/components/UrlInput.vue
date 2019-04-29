@@ -5,7 +5,7 @@
       <input id="url" v-model="url">
       <span class="btn rubbish" @click="rubbish">&#x2716;</span>
     </div>
-      <span id="get-button" class="btn" @click="sendUrl"> Get Video Info </span>
+      <span id="get-button"  :class="{requesting:requesting}"  class="btn" @click="sendUrl"> Get Video Info </span>
   <div>
     <!-- {{debug}} -->
   </div>
@@ -16,6 +16,7 @@
 
 export default {
   name: "url-input",
+   props:["requesting"],
   data() {
     return {
       url: "",
@@ -78,7 +79,11 @@ a {
   margin-left: 4px;
 }
 #get-button {
+  transition: 1s background-color;  
   padding: 10px;
 }
-
+.requesting {
+ 
+  background-color: #007bff87;
+}
 </style>

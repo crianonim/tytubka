@@ -26,7 +26,7 @@
           {{format.AudioBitrate}} kbs
         </div>
        
-      <span class="btn" :data-itag="format.Itag" @click="storeFormat">Store</span>
+      <span class="btn" :class="{requesting: requesting}"  :data-itag="format.Itag" @click="storeFormat">Store</span>
     </div>
   </div>
 </template>
@@ -38,13 +38,16 @@ export default {
     return {
       url: "",
       disabled: true,
+      beingStored:null,
       // jsonified:JSON.stringify(this.info)
     };
   },
-  props: ["info"],
+  props: ["info","requesting"],
   methods: {
     storeFormat(event) {
       let itag = event.currentTarget.dataset.itag;
+      this.beingStored=itag;
+      console.log("BEING STORED",itag)
       this.$emit("store-format", itag);
     }
   }
@@ -83,6 +86,9 @@ export default {
   padding: 10px;
   flex-grow: 0;
   margin:0;
+  transition: 1s background-color;
+  }
+.requesting {
+  background-color: #007bff87;
 }
-
 </style>

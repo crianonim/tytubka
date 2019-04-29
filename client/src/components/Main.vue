@@ -1,9 +1,9 @@
 <template>
   <div class="main">
    
-    <url-input @send-url="receiveUrl"></url-input>
+    <url-input :requesting="requesting"   @send-url="receiveUrl"></url-input>
     <div v-if="info">
-      <video-info @store-format="storeFormat" :info="info"></video-info>
+      <video-info :requesting="requesting" @store-format="storeFormat" :info="info"></video-info>
     </div>
     <div class="messages">
       <div v-for="(msg,key) in messages" :key="key">{{msg}}</div>
@@ -19,9 +19,11 @@ import VideoInfo from './VideoInfo.vue';
 
 export default {
   name: 'Main',
+ 
   data () {
     return {
         info:null,
+        requesting:false,
         messages:[],
         messagesMaxCount:3,
     }
@@ -42,7 +44,9 @@ export default {
             // this.messages.unshift("DATA"+result.data);
           
           // uncomment this
+          this.requesting=true;
           let result=await Service.getInfo(url);
+          this.requesting=false;
           console.log(result);
           this.info=result.data;
     
@@ -54,20 +58,23 @@ export default {
           }
       },
       async storeFormat(itag){
-          this.messages.unshift("Store format "+itag+" of "+this.info.title);
+          // this.messages.unshift("Store format "+itag+" of "+this.info.title);
           // console.log("storeFormat",itag,this.info.url);
           if (this.messages.length>this.messagesMaxCount) this.messages.pop();
           // poproś o downaloadowanie
+          this.requesting=true;
           let response=await Service.storeVideo(this.info.url,itag);
-          let id=response.data.metadata.id
+          this.requesting=false;
+          let id=response.data.metadata.id;
+          
           console.log("Will store ad id:",id);
-          try{
-              await Service.notify(id);
-              this.messages.unshift("Stored "+this.info.title+" ");
-          }
-          catch (e){
-              console.log("Couldn't notify",e);
-          }
+          // try{
+          //     await Service.notify(id);
+          //     this.messages.unshift("Stored "+this.info.title+" ");
+          // }
+          // catch (e){
+          //     console.log("Couldn't notify",e);
+          // }
 
       }
   },
@@ -80,4 +87,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 </style>
