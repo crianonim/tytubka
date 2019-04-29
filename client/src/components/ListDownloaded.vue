@@ -3,17 +3,30 @@
     <!-- {{status}} -->
     <ul>
       <li v-for="(row,ind) in list" :key="ind">
-        {{JSON.stringify(row)}}
+        <!-- {{JSON.stringify(row)}} -->
         <div class="video-item">
+           <a :href="url+'/'+row.id">
           <img :src="row.thumbnail_url">
+           </a>
           <div class="video-details">
-            <span class="title">{{row.title}}</span>
-            <span class="length">{{row.length}}</span>
-            <div class="file-details">
-              <span>{{row.size}}</span>
-              <span>{{row.formatData.Extension}}  </span>
+            <a :href="url+'/'+row.id"><span class="title">{{row.title}}</span></a>
+            <span class="grower"></span>
+            <div class="details-bottom-row">
+              <div>
+                <div>
+                  <a :href="row.video_url">YouTube</a>
+                  <span class="length">{{row.length}}</span>
+                </div>
+                <div class="file-details">
+                  <span>{{row.size}}</span>
+                  <span>{{row.formatData.Extension}}</span>
+                  <span>{{row.formatData.Resolution}}</span>
+                </div>
               </div>
-
+              <div class="grower"></div>
+              <div @click="deleteVideo(row.id)" class="delete">X</div>
+             </a>
+            </div>
           </div>
         </div>
       </li>
@@ -29,7 +42,8 @@ export default {
   data() {
     return {
       msg: "Welcome to Your List",
-      list: this.getDownloaded()
+      list: this.getDownloaded(),
+      url:location.origin+location.pathname+'api',
       // status: this.getStatus(),
     };
   },
@@ -44,6 +58,11 @@ export default {
         this.status = response.data;
         this.getStatus();
       });
+    },
+    async deleteVideo(id){
+      console.log("DELETE VIDEO",id)
+      await Service.deleteVideo(id);
+      this.list=this.getDownloaded();
     }
   }
 };
@@ -57,6 +76,18 @@ export default {
 .video-details {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  align-items: flex-start;
+  margin-left: 3px;
+  font-size: 0.8em;
+}
+.title {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+.details-bottom-row {
+  display: flex;
+  width:100%;
 }
 h1,
 h2 {
@@ -65,12 +96,29 @@ h2 {
 ul {
   list-style-type: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 li {
   display: inline-block;
-  margin: 0 10px;
+  margin: 10px 0px;
+  text-align: left;
+  background-color: beige;
 }
 a {
-  color: #42b983;
+  color: #007bff;
+}
+.grower {
+  flex-grow: 1;
+}
+.delete {
+  background-color:#dc3545;
+  color:white;
+  border-radius: 1em;
+  display:flex; 
+  height:2em;
+  width: 2em;
+  align-items: center;
+  justify-content: center;
 }
 </style>

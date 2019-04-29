@@ -56,6 +56,7 @@ router.get('/store', async function (req, res) {
     metadata.thumbnail_url = info.thumbnail_url;
     metadata.length = info.length_seconds;
     metadata.author = info.author;
+    metadata.video_url=info.video_url;
 
   });
   rs.on("progress", (chunkLength, downloaded, total) => {

@@ -2,8 +2,8 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
      <nav>
-      <router-link class="btn" to="/">Home</router-link>
-      <router-link class="btn" to="Downloaded">Stored</router-link>
+      <router-link :class="{selected:route=='Main'}" class="btn" to="/">Get</router-link>
+      <router-link :class="{selected:route=='Downloaded'}" class="btn" to="Downloaded">Stored</router-link>
 
       </nav>
     <router-view/>
@@ -12,7 +12,12 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  computed:{
+    route(){
+      return this.$route.name
+    }
+  },
 }
 </script>
 
@@ -21,7 +26,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
   /* margin-top: 30px; */
 }
@@ -41,8 +46,24 @@ li {
   margin: 0 10px;
 }
 .btn {
-  padding: 2px;
-  border: 1px solid black;
+  padding: 10px;
+  border: 1px solid #007bff;
+  color:#007bff;
+  border-radius: 4px;
   display: inline-block;
+  flex-grow: 1;
+  margin-right: 12px;
+  text-align: center;
 }
+.btn:last-of-type {
+  margin-right: 0;
+}
+.selected {
+  background-color: #007bff;
+  color:white;
+}
+nav {
+  width:100%;
+  display:flex;
+  }
 </style>

@@ -5,7 +5,7 @@
       <input id="url" v-model="url">
       <span class="btn rubbish" @click="rubbish">&#x2716;</span>
     </div>
-      <span id="get-button" class="btn" @click="sendUrl"> Get </span>
+      <span id="get-button" class="btn" @click="sendUrl"> Get Video Info </span>
   <div>
     <!-- {{debug}} -->
   </div>
@@ -72,9 +72,13 @@ a {
 .rubbish{
   padding-left: 10px;
   padding-right: 10px;
-
+  flex-grow: 0;
+  color: #dc3545;
+  border-color: #dc3545;
+  margin-left: 4px;
 }
 #get-button {
   padding: 10px;
 }
+
 </style>

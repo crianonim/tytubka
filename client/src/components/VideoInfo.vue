@@ -71,14 +71,18 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 10px;
+  padding: 2px;
   margin:2px 0;
 }
 .format-details {
   flex-grow:1;
+  margin:0 10px;
+  text-align: center;
 }
 .format .btn {
   padding: 10px;
+  flex-grow: 0;
+  margin:0;
 }
 
 </style>

@@ -12,6 +12,12 @@ export default {
   },u(){
       return axios.get(url+"/status")
   },
+  getStatus(){
+    return axios.get(url+'/status');
+  },
+  deleteVideo(id){
+    return axios.delete(url+"/"+id)
+  },
   storeVideo(askedUrl,itag){
     let videoid=askedUrl.replace(/^.*\/(watch\?v=)?/,'');
     console.log("Video Code:",videoid);
