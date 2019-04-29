@@ -8,21 +8,23 @@ export default {
       console.log(url)
      return axios.get(url)
     
-  },
-  getStatus(){
-      return axios.get(config.baseUrl+"/status")
+  },u(){
+      return axios.get(url+"/status")
   },
   storeVideo(askedUrl,itag){
-    return axios.get(config.baseUrl+"/store?itag="+itag+"&url="+askedUrl)
+    return axios.get(url+"/store?itag="+itag+"&url="+askedUrl)
     //return axios.post(config.baseUrl+"/",{url:askedUrl,itag});
   },
   notify(id){
     return axios.get(config.baseUrl+"/notify/"+id);
   },
   getInfo(askedUrl){
-    return axios.get(config.baseUrl+'/info/'+askedUrl.replace(/^.*\/(watch\?v=)?/,'') );
+    let videoid=askedUrl.replace(/^.*\/(watch\?v=)?/,'');
+    console.log("Video Code:",videoid);
+    console.log("Url:"+url);
+    return axios.get(url+'/info/'+videoid);
   },
   getHeadersStatus(askedUrl){
-      return axios.get(config.baseUrl+"/headersStatus?url="+encodeURI(askedUrl));
+      return axios.get(url+"/headersStatus?url="+encodeURI(askedUrl));
   }
 }
