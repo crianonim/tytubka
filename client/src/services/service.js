@@ -1,6 +1,7 @@
-import config from './config'
+import Config from './config'
 import axios from 'axios';
-const url="http://"+config.hostname+":"+config.port+config.baseUrl
+const url=location.protocol+"//"+location.hostname+(location.hostname=="localhost"?":"+Config.port:'')+location.pathname+"api"
+// const url="http://"+config.hostname+":"+config.port+config.baseUrl
 export default {
 
   getDownloaded () {
