@@ -18,7 +18,7 @@
     <div class="format" v-for="(format,key) in info.format" :data-itag="format.Itag" :key="key">
       <a
         class="btn"
-        :href=" 'api/direct/?itag='+format.Itag+'&extension='+format.Extension+'&url='+info.url+'&title='+encodeURI(info.title)"
+        :href=" 'api/direct/?itag='+format.Itag+'&videoid='+info.url.replace(/^.*\/(watch\?v=)?/,'')"
       >Download</a>
         <div class="format-details">
           {{format.Extension}}

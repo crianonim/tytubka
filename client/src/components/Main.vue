@@ -34,17 +34,17 @@ export default {
             this.info=null;
             return;
           }
-          console.log("SO?")
-          let info=JSON.parse('{"title":"Why Ford And Other American Cars Don’t Sell In Japan","thumbnail_url":"https://i.ytimg.com/vi/L9FELWSDYPk/default.jpg","format":[{"Extension":"mp4","Resolution":"720p","VideoEncoding":"H.264","AudioEncoding":"aac","Itag":22,"AudioBitrate":192},{"Extension":"webm","Resolution":"360p","VideoEncoding":"VP8","AudioEncoding":"vorbis","Itag":43,"AudioBitrate":128},{"Extension":"mp4","Resolution":"360p","VideoEncoding":"H.264","AudioEncoding":"aac","Itag":18,"AudioBitrate":96}],"url":"https://youtube.com/watch?v=L9FELWSDYPk","length":"7m 12s","author":{"id":"UCvJJ_dzjViJCoLf5uKUTwoA","name":"CNBC","avatar":"https://yt3.ggpht.com/a-/AAuE7mBUf8yDGTP1Y9SbGqQxnpLUsrCZWhHbd0CkAQ=s48-c-k-c0xffffffff-no-rj-mo","verified":true,"user":"cnbc","channel_url":"https://www.youtube.com/channel/UCvJJ_dzjViJCoLf5uKUTwoA","user_url":"https://www.youtube.com/user/cnbc"}}');
-          console.log("JESTEM",info);
-          this.info=info;
+          // console.log("SO?")
+          // let info=JSON.parse('{"title":"Why Ford And Other American Cars Don’t Sell In Japan","thumbnail_url":"https://i.ytimg.com/vi/L9FELWSDYPk/default.jpg","format":[{"Extension":"mp4","Resolution":"720p","VideoEncoding":"H.264","AudioEncoding":"aac","Itag":22,"AudioBitrate":192},{"Extension":"webm","Resolution":"360p","VideoEncoding":"VP8","AudioEncoding":"vorbis","Itag":43,"AudioBitrate":128},{"Extension":"mp4","Resolution":"360p","VideoEncoding":"H.264","AudioEncoding":"aac","Itag":18,"AudioBitrate":96}],"url":"https://youtube.com/watch?v=L9FELWSDYPk","length":"7m 12s","author":{"id":"UCvJJ_dzjViJCoLf5uKUTwoA","name":"CNBC","avatar":"https://yt3.ggpht.com/a-/AAuE7mBUf8yDGTP1Y9SbGqQxnpLUsrCZWhHbd0CkAQ=s48-c-k-c0xffffffff-no-rj-mo","verified":true,"user":"cnbc","channel_url":"https://www.youtube.com/channel/UCvJJ_dzjViJCoLf5uKUTwoA","user_url":"https://www.youtube.com/user/cnbc"}}');
+          // console.log("JESTEM",info);
+          // this.info=info;
           try {
             // this.messages.unshift("DATA"+result.data);
           
           // uncomment this
-          // let result=await Service.getInfo(url);
-          // console.log(result);
-          // this.info=result.data;
+          let result=await Service.getInfo(url);
+          console.log(result);
+          this.info=result.data;
     
            
           }

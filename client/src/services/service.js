@@ -12,7 +12,10 @@ export default {
       return axios.get(url+"/status")
   },
   storeVideo(askedUrl,itag){
-    return axios.get(url+"/store?itag="+itag+"&url="+askedUrl)
+    let videoid=askedUrl.replace(/^.*\/(watch\?v=)?/,'');
+    console.log("Video Code:",videoid);
+    console.log("Url:"+url);
+    return axios.get(url+"/store?itag="+itag+"&videoid="+videoid)
     //return axios.post(config.baseUrl+"/",{url:askedUrl,itag});
   },
   notify(id){
