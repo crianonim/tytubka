@@ -1,15 +1,28 @@
 <template>
   <div @click="getDownloaded" class="list">
     <!-- {{status}} -->
+    <div v-if="status && status.length" id="downloading">
+      <h3>Downloading</h3>
+      <ul>
+        <li v-for="(row,ind) in status" :key="ind">
+        <div>
+          <span> {{row.downloadedPercent}} % of {{row.size}}  {{row.title}}</span>
+        </div>
+        </li>
+      </ul>
+    </div>
+
     <ul>
       <li v-for="(row,ind) in list" :key="ind">
         <!-- {{JSON.stringify(row)}} -->
         <div class="video-item">
-           <a :href="url+'/'+row.id">
-          <img :src="row.thumbnail_url">
-           </a>
+          <a :href="url+'/'+row.id">
+            <img :src="row.thumbnail_url">
+          </a>
           <div class="video-details">
-            <a :href="url+'/'+row.id"><span class="title">{{row.title}}</span></a>
+            <a :href="url+'/'+row.id">
+              <span class="title">{{row.title}}</span>
+            </a>
             <span class="grower"></span>
             <div class="details-bottom-row">
               <div>
@@ -25,7 +38,6 @@
               </div>
               <div class="grower"></div>
               <div @click="deleteVideo(row.id)" class="delete">X</div>
-             </a>
             </div>
           </div>
         </div>
@@ -43,7 +55,9 @@ export default {
     return {
       msg: "Welcome to Your List",
       list: this.getDownloaded(),
-      url:location.origin+location.pathname+'api',
+      status: this.getStatus(),
+      url: location.origin + location.pathname + "api"
+
       // status: this.getStatus(),
     };
   },
@@ -51,19 +65,43 @@ export default {
     getDownloaded() {
       Service.getDownloaded().then(response => {
         this.list = response.data;
+        console.log("getDownloaded");
       });
     },
     getStatus() {
-      Service.getStatus().then(response => {
-        this.status = response.data;
-        this.getStatus();
-      });
+      return [
+        {
+          title: "7 NAWYKÓW SKUTECZNEGO DZIAŁANIA Stephen Covey",
+          id: "1556865227713",
+          downloadedPercent: (Math.random() * 100) >> 0,
+          size: 72639657,
+          thumbnail_url: "https://i.ytimg.com/vi/QwC3g6GnPvE/default.jpg"
+        },
+        {
+          title: "7 NAWYKÓW SKUTECZNEGO DZIAŁANIA Stephen Covey",
+          id: "1556865227713",
+          downloadedPercent: 30,
+          size: 72639657,
+          thumbnail_url: "https://i.ytimg.com/vi/QwC3g6GnPvE/default.jpg"
+        }
+      ];
+      // return false;
+      // Service.getStatus().then(response => {
+      //   this.status = response.data;
+      //   console.log("getStatus");
+
+      //   // if continuous set this after time
+      //   // this.getStatus();
+      // });
     },
-    async deleteVideo(id){
-      console.log("DELETE VIDEO",id)
+    async deleteVideo(id) {
+      console.log("DELETE VIDEO", id);
       await Service.deleteVideo(id);
-      this.list=this.getDownloaded();
+      this.list = this.getDownloaded();
     }
+  },
+  mounted() {
+    console.log("MOUNTED");
   }
 };
 </script>
@@ -87,7 +125,7 @@ export default {
 }
 .details-bottom-row {
   display: flex;
-  width:100%;
+  width: 100%;
 }
 h1,
 h2 {
@@ -112,11 +150,11 @@ a {
   flex-grow: 1;
 }
 .delete {
-  background-color:#dc3545;
-  color:white;
+  background-color: #dc3545;
+  color: white;
   border-radius: 1em;
-  display:flex; 
-  height:2em;
+  display: flex;
+  height: 2em;
   width: 2em;
   align-items: center;
   justify-content: center;
