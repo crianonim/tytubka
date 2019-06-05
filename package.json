@@ -7,7 +7,7 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "content-disposition": "^0.5.3",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
@@ -18,7 +18,7 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
     "pretty-ms": "^4.0.0",
-    "ytdl-core": "^0.29.1"
+    "ytdl-core": "^0.29.2"
   },
   "nodemonConfig": {
     "ignore": [
