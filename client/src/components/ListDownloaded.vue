@@ -1,6 +1,5 @@
 <template>
-  <div @click="getDownloaded" class="list">
-    <!-- {{status}} -->
+  <!-- <div @click="getDownloaded" class="list">
     <div v-if="status && status.length" id="downloading">
       <h3>Downloading</h3>
       <ul>
@@ -10,7 +9,7 @@
           </div>
         </li>
       </ul>
-    </div>
+    </div> -->
 
     <ul>
       <li v-for="(row,ind) in list" :key="ind">
