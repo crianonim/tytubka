@@ -5,9 +5,9 @@
       <h3>Downloading</h3>
       <ul>
         <li v-for="(row,ind) in status" :key="ind">
-        <div>
-          <span> {{row.downloadedPercent}} % of {{row.size}}  {{row.title}}</span>
-        </div>
+          <div>
+            <span>{{row.downloadedPercent}} % of {{row.size}} {{row.title}}</span>
+          </div>
         </li>
       </ul>
     </div>
@@ -16,7 +16,7 @@
       <li v-for="(row,ind) in list" :key="ind">
         <!-- {{JSON.stringify(row)}} -->
         <div class="video-item">
-          <a :href="url+'/'+row.id">
+          <a class="image-link" :href="url+'/'+row.id">
             <img :src="row.thumbnail_url">
           </a>
           <div class="video-details">
@@ -158,5 +158,17 @@ a {
   width: 2em;
   align-items: center;
   justify-content: center;
+}
+.image-link {
+  height: 94px;
+  background: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 120px;
+  flex-shrink: 0;
+}
+.image-link img {
+  width:100%;
 }
 </style>
