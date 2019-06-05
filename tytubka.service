@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User=criamon
-# Environment=MOUNT_PATH=tytubka PORT=3000
+Environment=PORT=3030
 WorkingDirectory=/home/criamon/share/tytubka
 Restart=always
 RestartSec=10
