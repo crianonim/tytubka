@@ -27,7 +27,10 @@ router.get('/status', (req, res) => {
 })
 router.get('/store', async function (req, res) {
   console.log(req.query);
-  let { videoid, itag } = req.query;
+  let {
+    videoid,
+    itag
+  } = req.query;
   let format = itag;
   let id = "" + Date.now();
   let url = videoid;
@@ -39,7 +42,9 @@ router.get('/store', async function (req, res) {
     id,
   }
   downloading.push(metadata)
-  let rs = ytdl(url, { format });
+  let rs = ytdl(url, {
+    format
+  });
   let ws = rs.pipe(fs.createWriteStream(__basedir + "/downloading/" + id))
 
   metadata.rs = rs;
@@ -48,15 +53,17 @@ router.get('/store', async function (req, res) {
   console.log("Downloading");
   rs.on("response", (r) => {
     metadata.size = Number(r.headers['content-length'])
-    res.send({ metadata });
+    res.send({
+      metadata
+    });
   })
   rs.on("info", (info) => {
     metadata.title = info.title;
     // console.log("info", info.title)
-    metadata.thumbnail_url = info.thumbnail_url;
+    metadata.thumbnail_url = info.player_response.videoDetails.thumbnail.thumbnails.pop().url;
     metadata.length = info.length_seconds;
     metadata.author = info.author;
-    metadata.video_url=info.video_url;
+    metadata.video_url = info.video_url;
 
   });
   rs.on("progress", (chunkLength, downloaded, total) => {
@@ -72,7 +79,7 @@ router.get('/store', async function (req, res) {
     metadata.timestamp = Date.now();
     delete metadata.rs;
     delete metadata.ws;
-    fs.writeFile(path.join(__basedir, 'output', id + ".json"), JSON.stringify(metadata, null, " "), () => { })
+    fs.writeFile(path.join(__basedir, 'output', id + ".json"), JSON.stringify(metadata, null, " "), () => {})
     downloading = downloading.filter(el => el.id != metadata.id);
     if (waiting[id]) {
       waiting[id].send("File " + metadata.title + " downloaded");
@@ -97,8 +104,7 @@ router.get('/cancel/:id', async function (req, res, next) {
     meta.rs.destroy();
     delete waiting[id];
     res.sendStatus(200);
-  }
-  else {
+  } else {
     res.sendStatus(404);
   }
 
@@ -109,8 +115,7 @@ router.get('/', async function (req, res, next) {
   files = await Promise.all(fileNames.map(async name => {
 
     return await readFile(path.join(__basedir, "output", name), 'utf8')
-  }
-  ));
+  }));
   files = files.reverse().map(el => JSON.parse(el))
     .map(el => {
       //  el.format = formats[el.format];
@@ -140,10 +145,32 @@ router.get('/info/:videoid', async function (req, res, next) {
   let info = await ytdl.getBasicInfo(url).catch(e => {
     res.json([])
   });
-  let { title, thumbnail_url, fmt_list, length_seconds, author } = info;
+  let {
+    title,
+    thumbnail_url,
+    fmt_list,
+    length_seconds,
+    author
+  } = info;
   let format = fmt_list.map(el => formats[el[0]])
   let length = prettyms(length_seconds * 1000);
-  res.json({ title, thumbnail_url, format, url, length, author })
+  if (!thumbnail_url) {
+    thumbnail_url = info.player_response.videoDetails.thumbnail.thumbnails.pop().url;
+    console.log(info.videoDetails)
+  }
+  if (req.query.debug) {
+    res.json(info)
+  } else {
+    res.json({
+      title,
+      thumbnail_url,
+      format,
+      url,
+      length,
+      author
+    })
+
+  }
 
 });
 
@@ -155,14 +182,16 @@ router.get('/headersStatus', async (req, res, next) => {
     let answer = await axios.head(url);
     console.log("AXIOS", answer.status)
     res.send(answer.status);
-  }
-  catch (e) {
+  } catch (e) {
     res.sendStatus(400);
   }
 
 })
 router.get('/direct', (req, res) => {
-  let { videoid, itag } = req.query;
+  let {
+    videoid,
+    itag
+  } = req.query;
   let extension = formats[itag].Extension;
   console.log('DIRECT', itag, videoid, extension);
   let url = 'https://youtube.com/watch?v=' + videoid;
@@ -202,7 +231,10 @@ router.get('/:id', async function (req, res, next) {
 
 router.post('/', async function (req, res, next) {
   console.log(req.body);
-  let { url, format } = req.body;
+  let {
+    url,
+    format
+  } = req.body;
 
   let id = "" + Date.now();
 
@@ -217,7 +249,9 @@ router.post('/', async function (req, res, next) {
   }
 
   downloading.push(metadata)
-  let rs = ytdl(url, { format });
+  let rs = ytdl(url, {
+    format
+  });
   let ws = rs.pipe(fs.createWriteStream(__basedir + "/downloading/" + id))
   let mock = fs.createWriteStream('mock.json')
   let mockStart = Date.now();
@@ -228,13 +262,15 @@ router.post('/', async function (req, res, next) {
   rs.on("response", (r) => {
     console.log("response")
     metadata.size = Number(r.headers['content-length'])
-    res.send({ metadata });
+    res.send({
+      metadata
+    });
 
   })
   rs.on("info", (info) => {
     metadata.title = info.title;
     console.log("info", info.title)
-    metadata.thumbnail_url = info.thumbnail_url;
+    metadata.thumbnail_url = info.player_response.videoDetails.thumbnail.thumbnails.pop().url;
     metadata.length = info.length_seconds;
     metadata.author = info.author;
 
@@ -254,7 +290,7 @@ router.post('/', async function (req, res, next) {
     metadata.timestamp = Date.now();
     delete metadata.rs;
     delete metadata.ws;
-    fs.writeFile(path.join(__basedir, 'output', id + ".json"), JSON.stringify(metadata, null, " "), () => { })
+    fs.writeFile(path.join(__basedir, 'output', id + ".json"), JSON.stringify(metadata, null, " "), () => {})
     downloading = downloading.filter(el => el.id != metadata.id);
     progress(metadata.id, 100)
 
@@ -267,18 +303,25 @@ router.post('/', async function (req, res, next) {
     })
   })
 });
+
 function progress(id, percent) {
   let res = waiting[id]
   if (res) {
-    res.json({ progress: percent });
+    res.json({
+      progress: percent
+    });
   }
 }
 
 router.delete('/:fileName', async function (req, res, next) {
   let fileName = req.params.fileName;
   //TODO ERROR CHECKING
-  await unlink(path.join(__basedir, "output", fileName)).catch((e) => { console.error(e) });
-  await unlink(path.join(__basedir, "output", fileName + ".json")).catch((e) => { console.error(e) });
+  await unlink(path.join(__basedir, "output", fileName)).catch((e) => {
+    console.error(e)
+  });
+  await unlink(path.join(__basedir, "output", fileName + ".json")).catch((e) => {
+    console.error(e)
+  });
   res.sendStatus(200);
 });
 
