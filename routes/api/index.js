@@ -26,7 +26,7 @@ router.get('/status', (req, res) => {
   })))
 })
 router.get('/store', async function (req, res) {
-  console.log(req.query);
+  // console.log(req.query);
   let {
     videoid,
     itag
@@ -56,6 +56,7 @@ router.get('/store', async function (req, res) {
     res.send({
       metadata
     });
+    console.log("GOT METADATA",metadata);
   })
   rs.on("info", (info) => {
     metadata.title = info.title;
@@ -64,7 +65,7 @@ router.get('/store', async function (req, res) {
     metadata.length = info.length_seconds;
     metadata.author = info.author;
     metadata.video_url = info.video_url;
-
+    console.log("GOT METADATA",metadata);
   });
   rs.on("progress", (chunkLength, downloaded, total) => {
     metadata.progressTotal = total;
@@ -198,7 +199,7 @@ router.get('/direct', (req, res) => {
   let yrs = ytdl(url);
   let disposition;
   yrs.on("info", (info) => {
-    disposition = contentDisposition(info.title + "." + extension);
+    disposition = contentDisposition(info.title.replace(/\//g,'_')+ "." + extension);
     console.log("Has disposition", disposition)
   })
 
@@ -216,7 +217,8 @@ router.get('/:id', async function (req, res, next) {
   let id = req.params.id;
   // console.log(req.params.fileName)
   let metadata = JSON.parse(await readFile(path.join(__basedir, "output", id + ".json"), 'utf8'));
-  let disposition = contentDisposition(metadata.title + "." + metadata.formatData.Extension);
+  let disposition = contentDisposition(metadata.title.replace(/\//g,'_') + "." + metadata.formatData.Extension);
+  console.log("TITLE",metadata.title.replace(/\//g,'_'), disposition)
   let rs = fs.createReadStream(path.join(__basedir, "output", id));
   res.writeHead(200, {
     // "Content-Type": response.headers["content-type"],
