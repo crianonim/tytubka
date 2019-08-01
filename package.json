@@ -18,7 +18,7 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
     "pretty-ms": "^4.0.0",
-    "ytdl-core": "^0.29.2"
+    "ytdl-core": "^0.29.5"
   },
   "nodemonConfig": {
     "ignore": [
