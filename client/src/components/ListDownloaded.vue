@@ -11,9 +11,8 @@
       </ul>
   </div>-->
   <div>
-    <p>{{profile.ig}}</p>
-    <img :src="profile.Paa" />
-    <ul>
+
+    <ul v-if="profile">
       <li v-for="(row,ind) in list" :key="ind">
         <!-- {{JSON.stringify(row)}} -->
         <div class="video-item">
@@ -44,6 +43,9 @@
         </div>
       </li>
     </ul>
+    <div v-if="!profile">
+      You need to be logged in.
+    </div>
   </div>
 </template>
 
@@ -56,7 +58,7 @@ export default {
   data() {
     return {
       msg: "Welcome to Your List",
-      profile: {},
+      profile: null,
       list: [],
       status: this.getStatus(),
       url: location.origin + location.pathname + "api"

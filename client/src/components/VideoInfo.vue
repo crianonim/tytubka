@@ -27,7 +27,7 @@
           {{format.AudioBitrate}} kbs
         </div>
        
-      <span class="btn" :class="{requesting: requesting}"  :data-itag="format.Itag" @click="storeFormat">Store</span>
+      <span v-if="profile" class="btn" :class="{requesting: requesting}"  :data-itag="format.Itag" @click="storeFormat">Store</span>
     </div>
   </div>
 </template>

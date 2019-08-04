@@ -16,13 +16,13 @@ export default {
     return axios.get(url+'/status');
   },
   deleteVideo(id){
-    return axios.delete(url+"/"+id)
+    return axios.delete(url+"/"+id+"?id_token="+window.id_token)
   },
   storeVideo(askedUrl,itag){
     let videoid=askedUrl.replace(/^.*\/(watch\?v=)?/,'');
     console.log("Video Code:",videoid);
     console.log("Url:"+url);
-    return axios.get(url+"/store?itag="+itag+"&videoid="+videoid)
+    return axios.get(url+"/store?itag="+itag+"&videoid="+videoid+"&id_token="+window.id_token)
     //return axios.post(config.baseUrl+"/",{url:askedUrl,itag});
   },
   notify(id){
