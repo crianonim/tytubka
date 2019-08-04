@@ -10,7 +10,7 @@
         </li>
       </ul>
     </div> -->
-
+ <div>
     <ul>
       <li v-for="(row,ind) in list" :key="ind">
         <!-- {{JSON.stringify(row)}} -->
@@ -62,10 +62,19 @@ export default {
   },
   methods: {
     getDownloaded() {
-      Service.getDownloaded().then(response => {
-        this.list = response.data;
+      if (window.guser) {
+        Service.getDownloaded().then(response => {
+          this.list = response.data;
         console.log("getDownloaded");
       });
+      } else {
+        console.log("Not ready yet");
+        setTimeout( ()=>{
+          Service.getDownloaded().then(response => {
+          this.list = response.data;
+        console.log("getDownloaded");});
+        },2000)
+      }
     },
     getStatus() {
       return [

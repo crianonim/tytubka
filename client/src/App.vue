@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
+    <google-sign-in></google-sign-in>
      <nav>
       <router-link :class="{selected:route=='Main'}" class="btn" to="/">Get</router-link>
       <router-link :class="{selected:route=='Downloaded'}" class="btn" to="Downloaded">Stored</router-link>
@@ -11,6 +12,8 @@
 </template>
 
 <script>
+import GoogleSignIn from '@/components/GoogleSignIn';
+
 export default {
   name: 'App',
   computed:{
@@ -18,6 +21,7 @@ export default {
       return this.$route.name
     }
   },
+  components: {GoogleSignIn}
 }
 </script>
 

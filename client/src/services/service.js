@@ -7,7 +7,7 @@ export default {
   getDownloaded () {
       
       console.log(url)
-     return axios.get(url)
+     return axios.get(url+"/?id_token="+window.id_token);
     
   },u(){
       return axios.get(url+"/status")

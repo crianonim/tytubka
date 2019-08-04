@@ -17,7 +17,13 @@ app.use(express.urlencoded({
 app.use(require('body-parser').json())
 app.use(cookieParser());
 app.use(require('cors')())
-
+app.use( (req,res,next)=>{
+  if (req.query.id_token){
+    console.log("TOKEN detected!")
+    //authenticate token here
+  }
+  next();
+})
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 app.use('/auth',require('./routes/google-verify'));
