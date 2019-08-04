@@ -9,14 +9,16 @@
           </div>
         </li>
       </ul>
-    </div> -->
- <div>
+  </div>-->
+  <div>
+    <p>{{profile.ig}}</p>
+    <img :src="profile.Paa" />
     <ul>
       <li v-for="(row,ind) in list" :key="ind">
         <!-- {{JSON.stringify(row)}} -->
         <div class="video-item">
           <a class="image-link" :href="url+'/'+row.id">
-            <img :src="row.thumbnail_url">
+            <img :src="row.thumbnail_url" />
           </a>
           <div class="video-details">
             <a :href="url+'/'+row.id">
@@ -50,31 +52,26 @@ import Service from "@/services/service";
 
 export default {
   name: "ListDownloaded",
+  props:[],
   data() {
     return {
       msg: "Welcome to Your List",
-      list: this.getDownloaded(),
+      profile: {},
+      list: [],
       status: this.getStatus(),
       url: location.origin + location.pathname + "api"
 
       // status: this.getStatus(),
     };
+  },computed:{
+   
   },
   methods: {
     getDownloaded() {
-      if (window.guser) {
-        Service.getDownloaded().then(response => {
-          this.list = response.data;
+      Service.getDownloaded().then(response => {
+        this.list = response.data;
         console.log("getDownloaded");
       });
-      } else {
-        console.log("Not ready yet");
-        setTimeout( ()=>{
-          Service.getDownloaded().then(response => {
-          this.list = response.data;
-        console.log("getDownloaded");});
-        },2000)
-      }
     },
     getStatus() {
       return [
@@ -108,8 +105,22 @@ export default {
       this.list = this.getDownloaded();
     }
   },
+  
   mounted() {
     console.log("MOUNTED");
+  },
+  created() {
+    console.log("DOWNLOAD created");
+    if (window.guser) {
+      this.profile = window.guser;
+      this.list = this.getDownloaded();
+    } else {
+      window.guserListeners.push(profile => {
+        console.log("Down", profile, this);
+        this.profile = profile;
+        this.list = this.getDownloaded();
+      });
+    }
   }
 };
 </script>
@@ -177,6 +188,6 @@ a {
   flex-shrink: 0;
 }
 .image-link img {
-  width:100%;
+  width: 100%;
 }
 </style>

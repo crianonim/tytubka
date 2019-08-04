@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-   
+    <p>{{profile}}</p>
     <url-input :requesting="requesting"   @send-url="receiveUrl"></url-input>
     <div v-if="info">
-      <video-info :requesting="requesting" @store-format="storeFormat" :info="info"></video-info>
+      <video-info :profile="profile" :requesting="requesting" @store-format="storeFormat" :info="info"></video-info>
     </div>
     <div class="messages">
       <div v-for="(msg,key) in messages" :key="key">{{msg}}</div>
@@ -22,10 +22,22 @@ export default {
  
   data () {
     return {
+      profile:null,
         info:null,
         requesting:false,
         messages:[],
         messagesMaxCount:3,
+    }
+  },
+   created() {
+    console.log("Main created");
+    if (window.guser) {
+      this.profile = window.guser;
+    } else {
+      window.guserListeners.push(profile => {
+        console.log("Vi", profile, this);
+        this.profile = profile;
+      });
     }
   },
   methods:{

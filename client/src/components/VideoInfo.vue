@@ -1,5 +1,6 @@
 <template>
   <div class="video-info">
+    <p>Profile:{{profile}}></p>
     <!-- <textarea v-model="jsonified"></textarea> -->
     <h3>
       <a :href="info.url">{{info.title}}</a>
@@ -36,13 +37,14 @@ export default {
   name: "url-input",
   data() {
     return {
+     
       url: "",
       disabled: true,
       beingStored:null,
       // jsonified:JSON.stringify(this.info)
     };
   },
-  props: ["info","requesting"],
+  props: ["info","requesting","profile"],
   methods: {
     storeFormat(event) {
       let itag = event.currentTarget.dataset.itag;
@@ -50,7 +52,8 @@ export default {
       console.log("BEING STORED",itag)
       this.$emit("store-format", itag);
     }
-  }
+  },
+ 
 };
 </script>
 

@@ -15,7 +15,8 @@ export default new Router({
     {
       path: '/downloaded',
       name: 'Downloaded',
-      component: ListDownloaded
+      component: ListDownloaded,
+      props:true
     }
   ]
 })

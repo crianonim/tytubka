@@ -9,11 +9,13 @@
     content="601808477842-j4n5ms0kopcmk5ca7upuah5ledsj1ft1.apps.googleusercontent.com">
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script>
+    window.guserListeners = [];
+
     function onSignIn(googleUser) {
       // Useful data for your client-side scripts:
       var profile = googleUser.getBasicProfile();
-      window.guser=profile;
-      window.guserProfileReady(profile);
+      window.guser = profile;
+      window.guserListeners.forEach(fn=>fn(profile))
       // console.log("ID: " + profile.getId()); // Don't send this directly to your server!
       // console.log("Full Name: " + profile.getName());
       // console.log("Given Name: " + profile.getGivenName());
