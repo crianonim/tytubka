@@ -20,6 +20,7 @@ app.use(require('cors')())
 
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
+app.use('/auth',require('./routes/google-verify'));
 apiRouter.use('/', require('./routes/api'));
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
