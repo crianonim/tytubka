@@ -218,7 +218,6 @@ router.get('/direct', (req, res) => {
 })
 
 router.get('/:user/:id', async function (req, res, next) {
-  //TODO:NOT WORKING!!!
   console.log("WILL DOWNLOAD")
   let id = req.params.id;
   const user = req.params.user
@@ -244,11 +243,12 @@ function progress(id, percent) {
 
 router.delete('/:fileName', async function (req, res, next) {
   let fileName = req.params.fileName;
+  const userDir=await getUserDirectory(req.user.sub);
   //TODO ERROR CHECKING
-  await unlink(path.join(__basedir, "output", fileName)).catch((e) => {
+  await unlink(path.join(userDir, fileName)).catch((e) => {
     console.error(e)
   });
-  await unlink(path.join(__basedir, "output", fileName + ".json")).catch((e) => {
+  await unlink(path.join(userDir, fileName + ".json")).catch((e) => {
     console.error(e)
   });
   res.sendStatus(200);
