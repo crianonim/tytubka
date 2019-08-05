@@ -217,12 +217,15 @@ router.get('/direct', (req, res) => {
   })
 })
 
-router.get('/:id', async function (req, res, next) {
+router.get('/:user/:id', async function (req, res, next) {
+  //TODO:NOT WORKING!!!
+  console.log("WILL DOWNLOAD")
   let id = req.params.id;
-  let metadata = JSON.parse(await readFile(path.join(__basedir, "output", id + ".json"), 'utf8'));
+  const user = req.params.user
+  let metadata = JSON.parse(await readFile(path.join(__basedir, "output",user, id + ".json"), 'utf8'));
   let disposition = contentDisposition(metadata.title.replace(/\//g, '_') + "." + metadata.formatData.Extension);
   console.log("TITLE", metadata.title.replace(/\//g, '_'), disposition)
-  let rs = fs.createReadStream(path.join(__basedir, "output", id));
+  let rs = fs.createReadStream(path.join(__basedir, "output",user, id));
   res.writeHead(200, {
     "Content-Length": metadata.size,
     "Content-Disposition": disposition

@@ -16,11 +16,11 @@
       <li v-for="(row,ind) in list" :key="ind">
         <!-- {{JSON.stringify(row)}} -->
         <div class="video-item">
-          <a class="image-link" :href="url+'/'+row.id">
+          <a class="image-link" :href="url+'/'+row.user+'/'+row.id">
             <img :src="row.thumbnail_url" />
           </a>
           <div class="video-details">
-            <a :href="url+'/'+row.id">
+            <a :href="url+'/'+row.user+'/'+row.id">
               <span class="title">{{row.title}}</span>
             </a>
             <span class="grower"></span>
