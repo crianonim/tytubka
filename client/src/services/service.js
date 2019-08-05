@@ -6,7 +6,7 @@ export default {
 
   getDownloaded () {
       
-      console.log(url)
+      console.log("TOKEN IN getDownloaded",window.id_token);
      return axios.get(url+"/?id_token="+window.id_token);
     
   },u(){

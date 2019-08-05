@@ -14,6 +14,7 @@
     function onSignIn(googleUser) {
       // Useful data for your client-side scripts:
       var profile = googleUser.getBasicProfile();
+      window.id_token = googleUser.getAuthResponse().id_token;
       window.guser = profile;
       window.guserListeners.forEach(fn=>fn(profile))
       // console.log("ID: " + profile.getId()); // Don't send this directly to your server!
@@ -24,7 +25,6 @@
       // console.log("Email: " + profile.getEmail());
 
       // The ID token you need to pass to your backend:
-      window.id_token = googleUser.getAuthResponse().id_token;
       console.log("ID Token: " + id_token);
       // fetch("https://oauth2.googleapis.com/tokeninfo?id_token="+id_token).then(resp=>resp.json()).then(result=>console.log(result));
       // fetch("/auth/token?id_token=" + id_token)

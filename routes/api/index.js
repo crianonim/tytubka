@@ -6,6 +6,7 @@ const util = require('util');
 const rename = util.promisify(fs.rename);
 const readFile = util.promisify(fs.readFile);
 const unlink = util.promisify(fs.unlink);
+const mkdir = util.promisify(fs.mkdir);
 const formats = require("../../formats");
 const filesize = require('filesize');
 const prettyms = require('pretty-ms');
@@ -14,6 +15,13 @@ const contentDisposition = require('content-disposition');
 // const mock = require('./mockDownload');
 let downloading = [];
 let waiting = {};
+
+
+const  getUserDirectory=async (sub)=>{
+  let pathToUserDir=path.join(__basedir,'output',sub)
+  await mkdir(pathToUserDir,{recursive:true});
+  return pathToUserDir;
+}
 
 router.get('/status', (req, res) => {
   res.json(downloading.map(meta => ({
@@ -112,9 +120,13 @@ router.get('/cancel/:id', async function (req, res, next) {
 });
 
 
+
+
 // / 
 router.get('/', async function (req, res, next) {
-  let fileNames = await util.promisify(fs.readdir)(path.join(__basedir, "output"))
+  const userDir=await getUserDirectory(req.user.sub);
+  console.log("Have user dir in",userDir);
+  let fileNames = await util.promisify(fs.readdir)(path.join(userDir))
   fileNames = fileNames.filter(name => name.endsWith(".json"))
   files = await Promise.all(fileNames.map(async name => {
     return await readFile(path.join(__basedir, "output", name), 'utf8')

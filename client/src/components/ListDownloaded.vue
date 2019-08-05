@@ -109,16 +109,17 @@ export default {
   },
   
   mounted() {
-    console.log("MOUNTED");
+    console.log("ListDownloaded mounted");
   },
   created() {
-    console.log("DOWNLOAD created");
+    console.log("ListDownloaded created");
     if (window.guser) {
+      console.log("ListDownloaded has user")
       this.profile = window.guser;
       this.list = this.getDownloaded();
     } else {
       window.guserListeners.push(profile => {
-        console.log("Down", profile, this);
+        console.log("ListDownloaded gets profile", profile, this);
         this.profile = profile;
         this.list = this.getDownloaded();
       });
