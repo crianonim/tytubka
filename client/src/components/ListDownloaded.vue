@@ -16,11 +16,11 @@
       <li v-for="(row,ind) in list" :key="ind">
         <!-- {{JSON.stringify(row)}} -->
         <div class="video-item">
-          <a class="image-link" :href="url+'/'+row.user+'/'+row.id">
+          <a class="image-link" :href="url+'/'+row.user+'/'+row.id+'?id_token='+token ">
             <img :src="row.thumbnail_url" />
           </a>
           <div class="video-details">
-            <a :href="url+'/'+row.user+'/'+row.id">
+            <a :href="url+'/'+row.user+'/'+row.id+'?id_token='+token ">
               <span class="title">{{row.title}}</span>
             </a>
             <span class="grower"></span>
@@ -59,6 +59,7 @@ export default {
     return {
       msg: "Welcome to Your List",
       profile: null,
+      token: window.id_token,
       list: [],
       status: this.getStatus(),
       url: location.origin + location.pathname + "api"
@@ -116,11 +117,14 @@ export default {
     if (window.guser) {
       console.log("ListDownloaded has user")
       this.profile = window.guser;
+      this.token=window.id_token;
       this.list = this.getDownloaded();
     } else {
       window.guserListeners.push(profile => {
         console.log("ListDownloaded gets profile", profile, this);
         this.profile = profile;
+      this.token=window.id_token;
+
         this.list = this.getDownloaded();
       });
     }
