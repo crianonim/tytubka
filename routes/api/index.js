@@ -50,6 +50,7 @@ router.get('/store', async function (req, res) {
     format,
     formatData: formats[format],
     id,
+    user:req.user.sub
   }
   downloading.push(metadata)
   let rs = ytdl(url, {
@@ -87,6 +88,7 @@ router.get('/store', async function (req, res) {
     console.log("FINISHED downloading...");
     rename(path.join(__basedir, 'downloading', id), path.join(userDir, id))
     metadata.timestamp = Date.now();
+    
     delete metadata.rs;
     delete metadata.ws;
     fs.writeFile(path.join(userDir, id + ".json"), JSON.stringify(metadata, null, " "), () => {})
