@@ -16,7 +16,8 @@ async function verify(req, res, next) {
     req.user = payload;
     next();
   } else {
-    res.send();
+    next();
+    // res.send();
   }
 }
 

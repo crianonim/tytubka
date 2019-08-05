@@ -36,6 +36,7 @@ router.get('/status', (req, res) => {
 // /store?videoid=123&itag=18
 router.get('/store', async function (req, res) {
   // console.log(req.query);
+  const userDir=await getUserDirectory(req.user.sub);
   let {
     videoid,
     itag
@@ -84,11 +85,11 @@ router.get('/store', async function (req, res) {
   })
   rs.on("end", () => {
     console.log("FINISHED downloading...");
-    rename(path.join(__basedir, 'downloading', id), path.join(__basedir, 'output', id))
+    rename(path.join(__basedir, 'downloading', id), path.join(userDir, id))
     metadata.timestamp = Date.now();
     delete metadata.rs;
     delete metadata.ws;
-    fs.writeFile(path.join(__basedir, 'output', id + ".json"), JSON.stringify(metadata, null, " "), () => {})
+    fs.writeFile(path.join(userDir, id + ".json"), JSON.stringify(metadata, null, " "), () => {})
     downloading = downloading.filter(el => el.id != metadata.id);
     if (waiting[id]) {
       waiting[id].send("File " + metadata.title + " downloaded");
@@ -129,7 +130,7 @@ router.get('/', async function (req, res, next) {
   let fileNames = await util.promisify(fs.readdir)(path.join(userDir))
   fileNames = fileNames.filter(name => name.endsWith(".json"))
   files = await Promise.all(fileNames.map(async name => {
-    return await readFile(path.join(__basedir, "output", name), 'utf8')
+    return await readFile(path.join(userDir, name), 'utf8')
   }));
   files = files.reverse().map(el => JSON.parse(el))
     .map(el => {
