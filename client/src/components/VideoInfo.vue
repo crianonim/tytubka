@@ -1,6 +1,6 @@
 <template>
   <div class="video-info">
-    <p>Profile:{{profile}}></p>
+  
     <!-- <textarea v-model="jsonified"></textarea> -->
     <h3>
       <a :href="info.url">{{info.title}}</a>

@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-    <p>{{profile}}</p>
     <url-input :requesting="requesting"   @send-url="receiveUrl"></url-input>
     <div v-if="info">
       <video-info :profile="profile" :requesting="requesting" @store-format="storeFormat" :info="info"></video-info>
