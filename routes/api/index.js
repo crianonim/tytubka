@@ -7,6 +7,7 @@ const rename = util.promisify(fs.rename);
 const readFile = util.promisify(fs.readFile);
 const unlink = util.promisify(fs.unlink);
 const mkdir = util.promisify(fs.mkdir);
+const access = util.promisify(fs.access);
 const formats = require("../../formats");
 const filesize = require('filesize');
 const prettyms = require('pretty-ms');
@@ -17,9 +18,22 @@ let downloading = [];
 let waiting = {};
 
 
-const  getUserDirectory=async (sub)=>{
-  let pathToUserDir=path.join(__basedir,'output',sub)
-  await mkdir(pathToUserDir,{recursive:true});
+const  getUserDirectory=async (profile)=>{
+  let pathToUserDir=path.join(__basedir,'output',profile.sub)
+  // await mkdir(pathToUserDir,{recursive:true});
+  // return pathToUserDir;
+  /// check if dir is there?
+  // uf not create it, create 11213213.json in top and profile.json in folder return folder name
+  // if yes return dirname;
+  // let pathToUserDir=path.join(__basedir,'output',sub)
+  await access(pathToUserDir,fs.F_OK).catch( async error=>{
+    console.log("dir does not exist");
+    await mkdir(pathToUserDir);
+    fs.writeFile(path.join(pathToUserDir,'..',profile.sub+"_profile.json"),JSON.stringify(profile,null,2),()=>{
+      console.log("Written")
+    });
+   
+  })
   return pathToUserDir;
 }
 
@@ -36,7 +50,7 @@ router.get('/status', (req, res) => {
 // /store?videoid=123&itag=18
 router.get('/store', async function (req, res) {
   // console.log(req.query);
-  const userDir=await getUserDirectory(req.user.sub);
+  const userDir=await getUserDirectory(req.user);
   let {
     videoid,
     itag
@@ -127,7 +141,7 @@ router.get('/cancel/:id', async function (req, res, next) {
 
 // / 
 router.get('/', async function (req, res, next) {
-  const userDir=await getUserDirectory(req.user.sub);
+  const userDir=await getUserDirectory(req.user);
   console.log("Have user dir in",userDir);
   let fileNames = await util.promisify(fs.readdir)(path.join(userDir))
   fileNames = fileNames.filter(name => name.endsWith(".json"))
@@ -243,7 +257,7 @@ function progress(id, percent) {
 
 router.delete('/:fileName', async function (req, res, next) {
   let fileName = req.params.fileName;
-  const userDir=await getUserDirectory(req.user.sub);
+  const userDir=await getUserDirectory(req.user);
   //TODO ERROR CHECKING
   await unlink(path.join(userDir, fileName)).catch((e) => {
     console.error(e)
