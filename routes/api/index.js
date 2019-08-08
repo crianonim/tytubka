@@ -13,19 +13,12 @@ const filesize = require('filesize');
 const prettyms = require('pretty-ms');
 const ytdl = require('ytdl-core');
 const contentDisposition = require('content-disposition');
-// const mock = require('./mockDownload');
 let downloading = [];
 let waiting = {};
 
 
 const  getUserDirectory=async (profile)=>{
   let pathToUserDir=path.join(__basedir,'output',profile.sub)
-  // await mkdir(pathToUserDir,{recursive:true});
-  // return pathToUserDir;
-  /// check if dir is there?
-  // uf not create it, create 11213213.json in top and profile.json in folder return folder name
-  // if yes return dirname;
-  // let pathToUserDir=path.join(__basedir,'output',sub)
   await access(pathToUserDir,fs.F_OK).catch( async error=>{
     console.log("dir does not exist");
     await mkdir(pathToUserDir);
@@ -37,19 +30,10 @@ const  getUserDirectory=async (profile)=>{
   return pathToUserDir;
 }
 
-router.get('/status', (req, res) => {
-  res.json(downloading.map(meta => ({
-    title: meta.title,
-    id: meta.id,
-    downloadedPercent: meta.progressPercent,
-    size: meta.size,
-    thumbnail_url: meta.thumbnail_url
-  })))
-})
+
 
 // /store?videoid=123&itag=18
 router.get('/store', async function (req, res) {
-  // console.log(req.query);
   const userDir=await getUserDirectory(req.user);
   let {
     videoid,
@@ -159,17 +143,6 @@ router.get('/', async function (req, res, next) {
   res.json(files)
 });
 
-// not working
-router.get("/notify/:id", (req, res, next) => {
-  console.log("NOTIFY")
-  let id = req.params.id;
-  if (downloading.find(el => el.id == id)) {
-    console.log("FOund")
-    waiting[req.params.id] = res;
-  } else {
-    res.sendStatus(404);
-  }
-})
 
 
 router.get('/info/:videoid', async function (req, res, next) {

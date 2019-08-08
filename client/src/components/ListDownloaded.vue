@@ -93,14 +93,6 @@ export default {
           thumbnail_url: "https://i.ytimg.com/vi/QwC3g6GnPvE/default.jpg"
         }
       ];
-      // return false;
-      // Service.getStatus().then(response => {
-      //   this.status = response.data;
-      //   console.log("getStatus");
-
-      //   // if continuous set this after time
-      //   // this.getStatus();
-      // });
     },
     async deleteVideo(id) {
       console.log("DELETE VIDEO", id);
