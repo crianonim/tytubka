@@ -11,12 +11,10 @@
       </ul>
   </div>-->
   <div>
-
     <ul v-if="profile">
-      <li v-for="(row,ind) in list" :key="ind">
-        <!-- {{JSON.stringify(row)}} -->
+      <li v-for="(row,ind) in getStatus().concat(list)" :key="ind">
         <div class="video-item">
-          <a class="image-link" :href="url+'/'+row.user+'/'+row.id+'?id_token='+token ">
+          <a class="image-link" v-if="!row.downloading" :href="url+'/'+row.user+'/'+row.id+'?id_token='+token ">
             <img :src="row.thumbnail_url" />
           </a>
           <div class="video-details">
@@ -28,12 +26,14 @@
               <div>
                 <div>
                   <a :href="row.video_url">YouTube</a>
-                  <span class="length">{{row.length}}</span>
+                  <span v-if="!row.downloading" class="length">{{row.length}}</span>
                 </div>
                 <div class="file-details">
+                  <span v-if="row.downloading">{{row.downloadedPercent}} % of </span>
                   <span>{{row.size}}</span>
-                  <span>{{row.formatData.Extension}}</span>
-                  <span>{{row.formatData.Resolution}}</span>
+                  <span v-if="!row.downloading">{{row.formatData.Extension}}</span>
+                  <span v-if="!row.downloading">{{row.formatData.Resolution}}</span>
+
                 </div>
               </div>
               <div class="grower"></div>
@@ -79,17 +79,19 @@ export default {
     getStatus() {
       return [
         {
+          downloading:true,
           title: "7 NAWYKÓW SKUTECZNEGO DZIAŁANIA Stephen Covey",
           id: "1556865227713",
           downloadedPercent: (Math.random() * 100) >> 0,
-          size: 72639657,
+          size: "72 MB",
           thumbnail_url: "https://i.ytimg.com/vi/QwC3g6GnPvE/default.jpg"
         },
         {
+          downloading:true,
           title: "7 NAWYKÓW SKUTECZNEGO DZIAŁANIA Stephen Covey",
           id: "1556865227713",
           downloadedPercent: 30,
-          size: 72639657,
+          size: "23.3 MB",
           thumbnail_url: "https://i.ytimg.com/vi/QwC3g6GnPvE/default.jpg"
         }
       ];

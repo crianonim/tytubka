@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
     <google-sign-in></google-sign-in>
     <nav>
       <router-link :class="{selected:route=='Main'}" class="btn" to="/">Get</router-link>
