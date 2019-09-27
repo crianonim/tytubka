@@ -8,6 +8,24 @@ Youtube videos downloading web app using Express, Vue 2 and ytdl-core (https://g
 
 You can download directly without signing in, but to store on server for future retrival you need an account
 
+## Problem / Requirements
+I would like to...
+- find a video if youtube link is entered
+- choose format and quality from the available for a given video
+- download directly a video file to my device even if I'm not logged in
+- be able to log into my account using my Google account
+- store the video on the server on my account and retrieve later (when on wifi)
+- delete stored videos from my account
+## Tech stack used to solve
+- Vue.js frontend
+- Youtube API
+- Google Authorisation mechanism
+- Express.js
+## Learning Outcomes
+- Vue.js framework
+- Working with complex API like Youtube and using libraries to help with that
+- Using Google Authorisation both on the frontend but also verifying it and using it to manage users account
+- Effectively working with filesystem with node.js
 
 ## Install
 
